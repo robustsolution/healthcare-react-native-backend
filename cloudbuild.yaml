@@ -1,0 +1,30 @@
+steps:
+- name: gcr.io/cloud-builders/gcloud
+  dir: app
+  args:
+  - kms
+  - decrypt
+  - --ciphertext-file={{gcloud-credential}}.json.enc
+  - --plaintext-file={{gcloud-credential}}.json
+  - --location=global
+  - --keyring={{keyring}}
+  - --key={{key}}
+- name: 'gcr.io/cloud-builders/docker'
+  args: [ 'build', '-t', 'gcr.io/$PROJECT_ID/{{image-name}}:$COMMIT_SHA',
+          '--build-arg', 'app_env_arg=prod',
+          '--build-arg', 'credential_file_arg={{gcloud-credential}}.json',
+          '--build-arg', 'db_instance_arg=${_DB_INSTANCE}',
+          '--build-arg', 'commit_sha_arg=$COMMIT_SHA',
+          '--build-arg', 'db_password_arg=${_DB_PASSWORD}',
+          '.' ]
+  dir: app
+- name: 'gcr.io/cloud-builders/kubectl'
+  env: ['CLOUDSDK_COMPUTE_ZONE={{compute-zone}}', 'CLOUDSDK_CONTAINER_CLUSTER={{gke-cluster-name}}']
+  args: ['set', 'image', 'deployment/{{deployment-name}}',
+         '{{image-name}}=gcr.io/$PROJECT_ID/{{image-name}}:$COMMIT_SHA']
+images:
+- 'gcr.io/$PROJECT_ID/{{image-name}}:$COMMIT_SHA'
+substitutions:
+  _DB_INSTANCE: '{{cloud-sql-instance}}'
+options:
+  machineType: 'N1_HIGHCPU_8'

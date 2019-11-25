@@ -1,0 +1,31 @@
+version: '2.4'
+
+services:
+  app:
+    build:
+      context: ./app/
+      args:
+        app_env_arg: dev_docker
+    ports:
+      - "8080:8080"
+    env_file:
+      - docker.env
+    command: ./run.sh
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    restart: always
+    image: postgres:9.6
+    env_file:
+      - docker.env
+    volumes:
+      - /var/lib/postgresql/
+    expose:
+      - "5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U cairn_dev"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
