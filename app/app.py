@@ -1,16 +1,16 @@
 from flask import Flask, jsonify
-from example_blueprint.example_blueprint_api import example_blueprint_api
+from mobile_api.mobile_api import mobile_api
 from web_errors import WebError
 from config import FLASK_DEBUG, FLASK_DEBUG_PORT
 
 app = Flask(__name__)
 app.url_map.strict_slashes = False
-app.register_blueprint(example_blueprint_api)
+app.register_blueprint(mobile_api)
 
 
 @app.route('/')
 def hello_world():
-    return jsonify({'message': 'Welcome to the Cairn Flask API Template',
+    return jsonify({'message': 'Welcome to the Hikma Health backend.',
                     'status': 'OK'})
 
 
