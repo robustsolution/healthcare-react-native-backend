@@ -1,5 +1,6 @@
 from users.data_access import user_data_by_email
 from web_errors import WebError
+from language_strings.language_string import LanguageString
 
 import bcrypt
 
@@ -23,12 +24,12 @@ class User:
     @classmethod
     def from_db_row(cls, db_row):
         id, name, role, email, hashed_password = db_row
-        return cls(id, name, role, email, hashed_password.encode())
+        return cls(id, LanguageString.from_id(name), role, email, hashed_password.encode())
 
     def to_dict(self):
         return {
             'id': self.id,
-            'name': self.name,
+            'name': self.name.to_dict(),
             'role': self.role,
             'email': self.email,
         }
