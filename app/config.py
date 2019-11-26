@@ -11,15 +11,15 @@ if ENV in ('dev_local', 'dev_docker'):
     elif ENV == 'dev_docker':
         PG_HOST = 'db'
 
-    PG_USER = 'cairn_dev'
+    PG_USER = 'hikma_dev'
     PG_PASSWORD = 'password'
-    PG_DB = 'cairn_dev'
+    PG_DB = 'hikma_dev'
     FLASK_DEBUG = True
 
 
 if ENV == 'prod':
     FLASK_DEBUG = False
-    PG_USER = 'cairn_prod'
+    PG_USER = 'hikma_prod'
     PG_PASSWORD = os.environ['DB_PASSWORD']
     PG_HOST = 'localhost'
-    PG_DB = 'cairn_prod'
+    PG_DB = 'hikma_prod'

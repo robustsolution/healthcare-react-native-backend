@@ -52,7 +52,9 @@ def upgrade():
     CREATE TABLE users (
       id uuid PRIMARY KEY,
       name uuid REFERENCES string_ids(id) ON DELETE CASCADE,
-      role text,
+      role text not null,
+      email text not null,
+      hashed_password text not null,
       edited_at timestamp with time zone
     );
     """)
