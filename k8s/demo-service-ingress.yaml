@@ -4,7 +4,7 @@ metadata:
   name: demo-service-ingress
   annotations:
     kubernetes.io/ingress.global-static-ip-name: 35.243.166.101
-    networking.gke.io/managed-certificates: demo-service-certificate
+    networking.gke.io/managed-certificates: demo-api-certificate
 spec:
   backend:
     serviceName: demo-nodeport-service

@@ -1,7 +1,7 @@
 apiVersion: networking.gke.io/v1beta1
 kind: ManagedCertificate
 metadata:
-  name: demo-service-certificate
+  name: demo-api-certificate
 spec:
   domains:
-    - "hikmahealth.org"
+    - "demo-api.hikmahealth.org"
