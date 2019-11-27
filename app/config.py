@@ -16,7 +16,6 @@ if ENV in ('dev_local', 'dev_docker'):
     PG_DB = 'hikma_dev'
     FLASK_DEBUG = True
 
-
 if ENV == 'prod':
     FLASK_DEBUG = False
     PG_USER = 'hikma_prod'
