@@ -8,7 +8,7 @@ steps:
   - --plaintext-file=hikma-health-098c787f1bcd.json
   - --location=global
   - --keyring=hikma-demo-keyring
-  - --key=hikma-demo-ke
+  - --key=hikma-demo-key
 - name: 'gcr.io/cloud-builders/docker'
   args: [ 'build', '-t', 'gcr.io/$PROJECT_ID/hikma-health-backend:$COMMIT_SHA',
           '--build-arg', 'app_env_arg=prod',
