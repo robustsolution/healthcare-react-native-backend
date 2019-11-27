@@ -4,27 +4,27 @@ steps:
   args:
   - kms
   - decrypt
-  - --ciphertext-file={{gcloud-credential}}.json.enc
-  - --plaintext-file={{gcloud-credential}}.json
+  - --ciphertext-file=hikma-health-098c787f1bcd.json.enc
+  - --plaintext-file=hikma-health-098c787f1bcd.json
   - --location=global
-  - --keyring={{keyring}}
-  - --key={{key}}
+  - --keyring=hikma-demo-keyring
+  - --key=hikma-demo-ke
 - name: 'gcr.io/cloud-builders/docker'
-  args: [ 'build', '-t', 'gcr.io/$PROJECT_ID/{{image-name}}:$COMMIT_SHA',
+  args: [ 'build', '-t', 'gcr.io/$PROJECT_ID/hikma-health-backend:$COMMIT_SHA',
           '--build-arg', 'app_env_arg=prod',
-          '--build-arg', 'credential_file_arg={{gcloud-credential}}.json',
+          '--build-arg', 'credential_file_arg=hikma-health-098c787f1bcd.json',
           '--build-arg', 'db_instance_arg=${_DB_INSTANCE}',
           '--build-arg', 'commit_sha_arg=$COMMIT_SHA',
           '--build-arg', 'db_password_arg=${_DB_PASSWORD}',
           '.' ]
   dir: app
-- name: 'gcr.io/cloud-builders/kubectl'
-  env: ['CLOUDSDK_COMPUTE_ZONE={{compute-zone}}', 'CLOUDSDK_CONTAINER_CLUSTER={{gke-cluster-name}}']
-  args: ['set', 'image', 'deployment/{{deployment-name}}',
-         '{{image-name}}=gcr.io/$PROJECT_ID/{{image-name}}:$COMMIT_SHA']
+# - name: 'gcr.io/cloud-builders/kubectl'
+#   env: ['CLOUDSDK_COMPUTE_ZONE={{compute-zone}}', 'CLOUDSDK_CONTAINER_CLUSTER={{gke-cluster-name}}']
+#   args: ['set', 'image', 'deployment/{{deployment-name}}',
+#          'hikma-health-backend=gcr.io/$PROJECT_ID/hikma-health-backend:$COMMIT_SHA']
 images:
-- 'gcr.io/$PROJECT_ID/{{image-name}}:$COMMIT_SHA'
+- 'gcr.io/$PROJECT_ID/hikma-health-backend:$COMMIT_SHA'
 substitutions:
-  _DB_INSTANCE: '{{cloud-sql-instance}}'
+  _DB_INSTANCE: 'hikma-health:us-east1:hikma-db-demo'
 options:
   machineType: 'N1_HIGHCPU_8'
