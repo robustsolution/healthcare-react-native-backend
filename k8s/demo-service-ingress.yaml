@@ -1,0 +1,11 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: demo-service-ingress
+  annotations:
+    kubernetes.io/ingress.global-static-ip-name: 35.243.166.101
+    networking.gke.io/managed-certificates: demo-service-certificate
+spec:
+  backend:
+    serviceName: demo-nodeport-service
+    servicePort: 80
