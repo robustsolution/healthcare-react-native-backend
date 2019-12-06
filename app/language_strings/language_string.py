@@ -3,7 +3,8 @@ from web_errors import WebError
 
 
 class LanguageString:
-    def __init__(self, content_by_language):
+    def __init__(self, id, content_by_language):
+        self.id = id
         self.content_by_language = content_by_language
 
     @classmethod
@@ -12,7 +13,9 @@ class LanguageString:
                 for language, content in language_string_data_by_id(id)}
         if not len(data):
             raise WebError(f"string id '{id}' not found.", 404)
-        return cls(data)
+        return cls(id, data)
 
     def to_dict(self):
-        return self.content_by_language
+        output = {'id': self.id}
+        output.update(self.content_by_language)
+        return output
