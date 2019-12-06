@@ -16,6 +16,7 @@ class LanguageString:
         return cls(id, data)
 
     def to_dict(self):
-        output = {'id': self.id}
-        output.update(self.content_by_language)
-        return output
+        return {
+            'id': self.id,
+            'content': self.content_by_language,
+        }
