@@ -7,7 +7,7 @@ services:
       args:
         app_env_arg: dev_docker
     ports:
-      - "8080:8080"
+      - "8090:8080"
     env_file:
       - docker.env
     command: ./run.sh
