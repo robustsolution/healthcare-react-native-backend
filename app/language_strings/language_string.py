@@ -1,9 +1,10 @@
 from language_strings.data_access import language_string_data_by_id
 from web_errors import WebError
+from typing import Dict
 
 
 class LanguageString:
-    def __init__(self, id, content_by_language):
+    def __init__(self, id: str, content_by_language: Dict[str, str]):
         self.id = id
         self.content_by_language = content_by_language
 

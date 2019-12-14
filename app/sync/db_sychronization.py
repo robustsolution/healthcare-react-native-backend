@@ -10,6 +10,14 @@ class DbSynchronizer:
         self.client_conn = sqlite3.connect(self.client_db_filename)
         self._test_client_db()
 
+    def do_sync(self):
+        self.server_sql_commands = []
+        self.client_sql_commands = []
+        return True
+
+    def get_client_sql(self):
+        return self.client_sql_commands
+
     def __del__(self):
         print('Garbage collecting uploaded client DB.')
         os.remove(self.client_db_filename)

@@ -23,5 +23,7 @@ def sync():
         raise WebError('db must be provided', 400)
 
     synchronizer = DbSynchronizer(request.files['db'])
+    if not synchronizer.do_sync():
+        raise WebError("Synchronization failed", 500)
 
-    return jsonify(list(params.keys()))
+    return jsonify({'to_execute': synchronizer.get_client_sql()})
