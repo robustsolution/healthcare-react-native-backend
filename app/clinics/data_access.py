@@ -8,4 +8,4 @@ def add_clinic(clinic):
     with get_connection() as conn:
         with conn.cursor() as cur:
             cur.execute('INSERT INTO clinics (id, name, edited_at) VALUES (%s, %s, %s)',
-                        [clinic.id, clinic.name.id, datetime.now()])
+                        [clinic.id, clinic.name.id, clinic.edited_at])
