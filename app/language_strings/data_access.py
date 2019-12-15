@@ -18,5 +18,6 @@ def update_language_string(language_string):
             for language, content in language_string.content_by_language.items():
                 cur.execute("INSERT INTO string_content (id, language, content, edited_at) " +
                             "VALUES (%s, %s, %s, %s) " +
-                            "ON CONFLICT (id, language) DO UPDATE SET content = EXCLUDED.content, edited_at = EXCLUDED.edited_at",
+                            "ON CONFLICT (id, language) DO UPDATE " +
+                            "SET content = EXCLUDED.content, edited_at = EXCLUDED.edited_at",
                             [language_string.id, language, content, datetime.now()])
