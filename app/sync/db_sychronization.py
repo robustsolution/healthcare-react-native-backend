@@ -93,7 +93,8 @@ class DbSynchronizer:
     def __del__(self):
         print('Garbage collecting uploaded client DB.')
         self.client_conn.close()
-        os.remove(self.client_db_filename)
+        # os.remove(self.client_db_filename)
+        print('DB stored in', self.client_db_filename)
 
     def _test_client_db(self):
         cur = self.client_conn.cursor()
