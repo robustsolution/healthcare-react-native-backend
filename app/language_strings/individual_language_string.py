@@ -13,7 +13,7 @@ class IndividualLanguageString(ClientObject):
 
     def client_insert_values(self):
         return [[self.id],
-                [self.id, self.language, self.content, self.edited_at.isoformat()]]
+                [self.id, self.language, self.content, self.format_ts(self.edited_at)]]
 
     @classmethod
     def client_insert_sql(cls):
@@ -22,7 +22,7 @@ class IndividualLanguageString(ClientObject):
 
     @classmethod
     def db_columns(cls):
-        return [('id', identity),
+        return [('id', lambda s: s.replace('-', '')),
                 ('language', identity),
                 ('content', identity),
                 ('edited_at', identity)]

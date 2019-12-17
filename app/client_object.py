@@ -1,3 +1,5 @@
+from datetime import datetime, timezone
+
 class ClientObject:
     @classmethod
     def table_name(cls):
@@ -26,3 +28,6 @@ class ClientObject:
         """
         return {}
 
+    @staticmethod
+    def format_ts(dt: datetime):
+        return dt.astimezone(timezone.utc).isoformat().replace('+00:00', 'Z')

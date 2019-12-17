@@ -12,7 +12,7 @@ class Clinic(ClientObject):
     edited_at: datetime
 
     def client_insert_values(self):
-        return [self.id, self.name.id, self.edited_at.isoformat()]
+        return [self.id, self.name.id.replace('-', ''), self.format_ts(self.edited_at)]
 
     @classmethod
     def client_insert_sql(cls):
@@ -20,7 +20,7 @@ class Clinic(ClientObject):
 
     @classmethod
     def db_columns(cls):
-        return [('id', identity),
+        return [('id', lambda s: s.replace('-', '')),
                 ('name', lambda x: LanguageString(x, {})),
                 ('edited_at', identity)]
 

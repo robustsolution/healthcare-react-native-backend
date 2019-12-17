@@ -18,6 +18,6 @@ class LanguageString:
 
     def to_dict(self):
         return {
-            'id': self.id,
+            'id': self.id.replace('-', ''),
             'content': self.content_by_language,
         }
