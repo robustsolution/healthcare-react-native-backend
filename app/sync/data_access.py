@@ -5,7 +5,7 @@ def get_ids_and_edit_timestamps(table_name):
     with get_connection() as conn:
         with conn.cursor() as cur:
             cur.execute(f'SELECT id, edited_at FROM {table_name}')
-            return {k: ts for k, ts in cur}
+            return {k.replace('-', ''): ts for k, ts in cur}
 
 
 def get_table_rows(object_type, ids):
