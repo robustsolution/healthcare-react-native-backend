@@ -11,6 +11,8 @@ def language_string_data_by_id(id):
 
 
 def update_language_string(language_string):
+    if language_string is None:
+        return
     with get_connection() as conn:
         with conn.cursor() as cur:
             cur.execute("INSERT INTO string_ids (id) VALUES (%s) ON CONFLICT (id) DO NOTHING",

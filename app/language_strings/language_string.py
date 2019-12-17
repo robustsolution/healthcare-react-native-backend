@@ -1,6 +1,6 @@
 from language_strings.data_access import language_string_data_by_id
 from web_errors import WebError
-from typing import Dict
+from typing import Dict, Optional
 
 
 class LanguageString:
@@ -21,3 +21,10 @@ class LanguageString:
             'id': self.id.replace('-', ''),
             'content': self.content_by_language,
         }
+
+
+def to_id(language_string: Optional[LanguageString]):
+    if language_string is None:
+        return None
+    else:
+        return language_string.id

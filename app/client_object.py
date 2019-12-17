@@ -1,4 +1,5 @@
-from datetime import datetime, timezone
+from datetime import datetime, timezone, date
+from language_strings.language_string import LanguageString
 
 class ClientObject:
     @classmethod
@@ -31,3 +32,21 @@ class ClientObject:
     @staticmethod
     def format_ts(dt: datetime):
         return dt.astimezone(timezone.utc).isoformat().replace('+00:00', 'Z')
+
+    @staticmethod
+    def format_string(s: LanguageString):
+        if s is None:
+            return None
+        else:
+            return s.id.replace('-', '')
+
+    @staticmethod
+    def make_language_string(s):
+        if s is None:
+            return None
+        else:
+            return LanguageString(s, {})
+
+    @staticmethod
+    def format_date(d: date):
+        return str(d)
