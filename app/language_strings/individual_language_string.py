@@ -18,7 +18,7 @@ class IndividualLanguageString(ClientObject):
     @classmethod
     def client_insert_sql(cls):
         return ["INSERT OR IGNORE INTO string_ids (id) VALUES (?)",
-                "INSERT INTO string_content (id, language, content, edited_at) VALUES (?, ?, ?, ?)"]
+                "INSERT OR IGNORE INTO string_content (id, language, content, edited_at) VALUES (?, ?, ?, ?)"]
 
     @classmethod
     def db_columns(cls):
@@ -30,4 +30,3 @@ class IndividualLanguageString(ClientObject):
     @classmethod
     def table_name(cls):
         return "string_content"
-

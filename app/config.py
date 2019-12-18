@@ -3,8 +3,8 @@ ENV = os.environ.get('APP_ENV', 'dev_local')
 
 FLASK_DEBUG_PORT = 5000
 
-if ENV in ('dev_local', 'dev_docker'):
-    if ENV == 'dev_local':
+if ENV in ('dev_local', 'dev_docker', 'stg'):
+    if ENV in ('dev_local', 'stg'):
         PG_HOST = 'localhost'
     elif ENV == 'dev_docker':
         PG_HOST = 'db'
