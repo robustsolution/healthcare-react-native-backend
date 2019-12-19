@@ -68,7 +68,7 @@ class DbSynchronizer:
         values = [obj.client_insert_values() for obj in get_table_rows(object_type, ids)]
 
         if not values:
-            return None
+            return []
 
         if isinstance(sql, list):
             result = []
