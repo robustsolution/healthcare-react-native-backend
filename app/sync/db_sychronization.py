@@ -2,6 +2,8 @@ from werkzeug.datastructures import FileStorage
 from tempfile import NamedTemporaryFile
 from language_strings.individual_language_string import IndividualLanguageString
 from clinics.clinic import Clinic
+from visits.visit import Visit
+from events.event import Event
 from patients.patient import Patient
 from sync.data_access import get_ids_and_edit_timestamps, get_table_rows, get_string_ids_and_edit_timestamps
 import sqlite3
@@ -22,6 +24,8 @@ class DbSynchronizer:
         self._prepare_table_sync(IndividualLanguageString)
         self._prepare_table_sync(Clinic)
         self._prepare_table_sync(Patient)
+        self._prepare_table_sync(Visit)
+        self._prepare_table_sync(Event)
         # self._prepare_strings_sync()
         return True
 
