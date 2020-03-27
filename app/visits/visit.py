@@ -19,12 +19,11 @@ class Visit(ClientObject):
                 self.clinic_id,
                 self.provider_id,
                 self.format_ts(self.check_in_timestamp),
-                self.format_ts(self.check_out_timestamp),
-                self.format_ts(self.edited_at)]
+                self.format_ts(self.check_out_timestamp)]
 
     @classmethod
     def client_insert_sql(cls):
-        return """INSERT INTO visits (id, patient_id, clinic_id, provider_id, check_in_timestamp, check_out_timestamp, edited_at) VALUES (?, ?, ?, ?, ?, ?, ?)"""
+        return """INSERT INTO visits (id, patient_id, clinic_id, provider_id, check_in_timestamp, check_out_timestamp) VALUES (?, ?, ?, ?, ?, ?)"""
 
     @classmethod
     def db_columns(cls):
@@ -33,11 +32,8 @@ class Visit(ClientObject):
                 ('clinic_id', lambda s: s.replace('-', '')),
                 ('provider_id', lambda s: s.replace('-', '')),
                 ('check_in_timestamp', identity),
-                ('check_out_timestamp', identity),
-                ('edited_at', identity)]
+                ('check_out_timestamp', identity)]
 
     @classmethod
     def table_name(cls):
         return "visits"
-
-
