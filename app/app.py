@@ -1,11 +1,14 @@
 from flask import Flask, jsonify
 from mobile_api.mobile_api import mobile_api
+from user_api.user_api import user_api
 from web_errors import WebError
 from config import FLASK_DEBUG, FLASK_DEBUG_PORT
+
 
 app = Flask(__name__)
 app.url_map.strict_slashes = False
 app.register_blueprint(mobile_api)
+app.register_blueprint(user_api)
 
 
 @app.route('/')

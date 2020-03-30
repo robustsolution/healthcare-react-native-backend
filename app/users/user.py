@@ -1,4 +1,4 @@
-from users.data_access import user_data_by_email
+import users.data_access as db
 from web_errors import WebError
 from language_strings.language_string import LanguageString
 
@@ -15,7 +15,7 @@ class User:
 
     @classmethod
     def authenticate(cls, email, password):
-        user = cls.from_db_row(user_data_by_email(email))
+        user = cls.from_db_row(db.user_data_by_email(email))
         if not bcrypt.checkpw(password.encode(), user.hashed_password):
             raise WebError("password incorrect", status_code=401)
         else:
@@ -25,6 +25,9 @@ class User:
     def from_db_row(cls, db_row):
         id, name, role, email, hashed_password = db_row
         return cls(id, LanguageString.from_id(name), role, email, hashed_password.encode())
+
+    def reset_password(self, new_password):
+        db.update_password(self.id, new_password)
 
     def to_dict(self):
         return {
