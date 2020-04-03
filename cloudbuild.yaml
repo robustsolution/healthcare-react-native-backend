@@ -16,6 +16,7 @@ steps:
           '--build-arg', 'db_instance_arg=${_DB_INSTANCE}',
           '--build-arg', 'commit_sha_arg=$COMMIT_SHA',
           '--build-arg', 'db_password_arg=${_DB_PASSWORD}',
+          '--build-arg', 'photos_storage_bucket_arg=${_PHOTOS_STORAGE_BUCKET}',
           '.' ]
   dir: app
 - name: 'gcr.io/cloud-builders/kubectl'
