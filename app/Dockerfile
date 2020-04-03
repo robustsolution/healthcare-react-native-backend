@@ -22,6 +22,9 @@ ENV DB_PASSWORD=$db_password_arg
 ARG credential_file_arg
 ENV GOOGLE_APPLICATION_CREDENTIALS=$credential_file_arg
 
+ARG photos_storage_bucket_arg
+ENV PHOTOS_STORAGE_BUCKET=$photos_storage_bucket_arg
+
 # Necessary for Celery to run properly inside docker
 ENV C_FORCE_ROOT=1
 

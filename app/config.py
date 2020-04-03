@@ -13,6 +13,8 @@ if ENV in ('dev_local', 'dev_docker', 'stg'):
     PG_PASSWORD = 'password'
     PG_DB = 'hikma_dev'
     FLASK_DEBUG = True
+    PHOTOS_STORAGE_BUCKET = 'dev-api-photos'
+    LOCAL_PHOTO_STORAGE_DIR = '/tmp/hikma_photos'
 
 if ENV == 'prod':
     FLASK_DEBUG = False
@@ -20,3 +22,5 @@ if ENV == 'prod':
     PG_PASSWORD = os.environ['DB_PASSWORD']
     PG_HOST = 'localhost'
     PG_DB = 'hikma_prod'
+    PHOTOS_STORAGE_BUCKET = os.environ['PHOTOS_STORAGE_BUCKET']
+    LOCAL_PHOTO_STORAGE_DIR = '/tmp/hikma_photos'
