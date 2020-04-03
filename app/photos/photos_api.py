@@ -24,6 +24,8 @@ def get_photo():
     if base_filename is None:
         raise WebError('Patient photo unavailable', 404)
     filename = retrieve_photo(base_filename)
+    if filename is None:
+        raise WebError('Patient photo unavailable', 404)
     return send_file(filename)
 
 

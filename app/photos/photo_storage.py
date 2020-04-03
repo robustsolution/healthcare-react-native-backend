@@ -1,5 +1,6 @@
 import os
 from google.cloud import storage
+from google.api_core.exceptions import NotFound
 from config import LOCAL_PHOTO_STORAGE_DIR, PHOTOS_STORAGE_BUCKET
 
 storage_client = storage.Client()
@@ -15,7 +16,7 @@ def store_photo(file_storage):
     blob = bucket.blob(base_name)
     print(f'Uploading {base_name} to GCS bucket {PHOTOS_STORAGE_BUCKET}...')
     blob.upload_from_filename(local_filename)
-    return local_filename
+    return base_name
 
 
 def retrieve_photo(base_filename):
@@ -30,5 +31,8 @@ def _retrieve_photo_from_gcs(base_filename):
     bucket = storage_client.bucket(PHOTOS_STORAGE_BUCKET)
     blob = bucket.blob(base_filename)
     local_filename = os.path.join(LOCAL_PHOTO_STORAGE_DIR, base_filename)
-    blob.download_to_filename(local_filename)
-    return local_filename
+    try:
+        blob.download_to_filename(local_filename)
+        return local_filename
+    except NotFound:
+        return None
