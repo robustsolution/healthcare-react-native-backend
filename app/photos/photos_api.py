@@ -13,7 +13,8 @@ photos_api = Blueprint('photos_api', __name__, url_prefix='/api/photos')
 def metadata():
     params = assert_data_has_keys(request, {'email', 'password'})
     User.authenticate(params['email'], params['password'])
-    return jsonify(dict(all_photo_filenames()))
+    response = {k.replace('-', ''): v for k, v in all_photo_filenames()}
+    return jsonify(response)
 
 
 @photos_api.route('/get_photo', methods=['POST'])
