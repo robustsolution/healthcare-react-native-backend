@@ -27,7 +27,7 @@ class DbSynchronizer:
         self._prepare_table_sync(Clinic)
         self._prepare_table_sync(Patient)
         self._prepare_table_sync(Visit)
-        # self._prepare_table_sync(Event)
+        self._prepare_table_sync(Event)
 
         return True
 
