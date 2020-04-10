@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from language_strings.language_string import LanguageString
 from client_object import ClientObject
 from datetime import datetime
-from util import identity
+from util import identity, parse_client_timestamp
 
 
 @dataclass
@@ -18,13 +18,25 @@ class Clinic(ClientObject):
     def client_insert_sql(cls):
         return """INSERT INTO clinics (id, name, edited_at) VALUES (?, ?, ?)"""
 
+    def server_insert_values(self):
+        return [self.id, self.name.id, self.edited_at]
+
     @classmethod
-    def db_columns(cls):
+    def server_insert_sql(cls):
+        return """INSERT INTO clinics (id, name, edited_at) VALUES (%s, %s, %s)"""
+
+    @classmethod
+    def db_columns_from_server(cls):
         return [('id', lambda s: s.replace('-', '')),
-                ('name', lambda x: LanguageString(x, {})),
+                ('name', cls.make_language_string),
                 ('edited_at', identity)]
+
+    @classmethod
+    def db_columns_from_client(cls):
+        return [('id', identity),
+                ('name', cls.make_language_string),
+                ('edited_at', parse_client_timestamp)]
 
     @classmethod
     def table_name(cls):
         return "clinics"
-

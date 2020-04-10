@@ -1,14 +1,16 @@
 from werkzeug.datastructures import FileStorage
 from tempfile import NamedTemporaryFile
 from language_strings.individual_language_string import IndividualLanguageString
+from client_object import ClientObject
 from clinics.clinic import Clinic
 from visits.visit import Visit
 from events.event import Event
 from patients.patient import Patient
-from sync.data_access import get_ids_and_edit_timestamps, get_table_rows, get_string_ids_and_edit_timestamps
+from sync.data_access import get_ids_and_edit_timestamps, get_table_rows, get_string_ids_and_edit_timestamps, execute_sql
 import sqlite3
 import itertools
-import dateutil.parser
+from util import parse_client_timestamp
+from typing import List
 
 
 class DbSynchronizer:
@@ -26,11 +28,24 @@ class DbSynchronizer:
         self._prepare_table_sync(Patient)
         self._prepare_table_sync(Visit)
         self._prepare_table_sync(Event)
-        # self._prepare_strings_sync()
+
         return True
 
     def get_client_sql(self):
+        print('Sending SQL to client:')
+        for data in self.client_sql:
+            print(data['sql'])
+            for v in data['values']:
+                print('    ', v)
         return self.client_sql
+
+    def execute_server_side_sql(self):
+        print('Executing SQL on server:')
+        for data in self.server_sql:
+            print(data['sql'])
+            for v in data['values']:
+                print('    ', v)
+            execute_sql(data['sql'], data['values'])
 
     def _prepare_table_sync(self, object_type):
         table_name = object_type.table_name()
@@ -62,7 +77,9 @@ class DbSynchronizer:
             self._generate_client_update_sql(object_type, to_add_to_client)))
 
     def _generate_server_add_sql(self, object_type, ids):
-        return []
+        sql = object_type.server_insert_sql()
+        values = [obj.server_insert_values() for obj in self._get_client_table_rows(object_type, ids)]
+        return self._combine_result_sql_and_values(sql, values)
 
     def _generate_server_update_sql(self, object_type, ids):
         return []
@@ -70,7 +87,13 @@ class DbSynchronizer:
     def _generate_client_add_sql(self, object_type, ids):
         sql = object_type.client_insert_sql()
         values = [obj.client_insert_values() for obj in get_table_rows(object_type, ids)]
+        return self._combine_result_sql_and_values(sql, values)
 
+
+    def _generate_client_update_sql(self, object_type, ids):
+        return []
+
+    def _combine_result_sql_and_values(self, sql, values):
         if not values:
             return []
 
@@ -91,9 +114,6 @@ class DbSynchronizer:
                 'values': values
             }]
 
-    def _generate_client_update_sql(self, object_type, ids):
-        return []
-
     def __del__(self):
         print('Garbage collecting uploaded client DB.')
         self.client_conn.close()
@@ -109,12 +129,25 @@ class DbSynchronizer:
     def _get_client_ids_and_edit_timestamps(self, table_name):
         cur = self.client_conn.cursor()
         cur.execute(f'SELECT id, edited_at FROM {table_name}')
-        return {k: dateutil.parser.parse(ts) for k, ts in cur}
+        return {k: parse_client_timestamp(ts) for k, ts in cur}
 
     def _get_string_client_ids_and_edit_timestamps(self):
         cur = self.client_conn.cursor()
         cur.execute(f'SELECT id, language, edited_at FROM string_content')
-        return {(id, lang): dateutil.parser.parse(ts) for id, lang, ts in cur}
+        return {(id, lang): parse_client_timestamp(ts) for id, lang, ts in cur}
+
+    def _get_client_table_rows(self, object_type: ClientObject, ids: List[str]):
+        cur = self.client_conn.cursor()
+        table_name = object_type.table_name()
+        columns, constructors = zip(*object_type.db_columns_from_client())
+        column_select_str = ', '.join(columns)
+
+        for id in ids:
+            cur.execute(f'SELECT {column_select_str} FROM {table_name} WHERE id = ?', [id])
+            row = cur.fetchone()
+            if row:
+                values = [c(r) for c, r in zip(constructors, row)]
+                yield object_type(**dict(zip(columns, values)))
 
     @staticmethod
     def _write_client_db_to_tempfile(client_db_file: FileStorage):

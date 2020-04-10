@@ -26,4 +26,5 @@ def sync():
     if not synchronizer.prepare_sync():
         raise WebError("Synchronization failed", 500)
 
+    synchronizer.execute_server_side_sql()
     return jsonify({'to_execute': synchronizer.get_client_sql()})

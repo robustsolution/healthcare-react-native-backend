@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from client_object import ClientObject
 from datetime import datetime
-from util import identity
+from util import identity, parse_client_timestamp
 
 
 @dataclass
@@ -21,11 +21,27 @@ class IndividualLanguageString(ClientObject):
                 "INSERT OR IGNORE INTO string_content (id, language, content, edited_at) VALUES (?, ?, ?, ?)"]
 
     @classmethod
-    def db_columns(cls):
+    def server_insert_sql(cls):
+        return ["INSERT INTO string_ids (id) VALUES (%s) ON CONFLICT (id) DO NOTHING;",
+                "INSERT INTO string_content (id, language, content, edited_at) VALUES (%s, %s, %s, %s) ON CONFLICT DO NOTHING"]
+
+    def server_insert_values(self):
+        return [[self.id],
+                [self.id, self.language, self.content, self.edited_at]]
+
+    @classmethod
+    def db_columns_from_server(cls):
         return [('id', lambda s: s.replace('-', '')),
                 ('language', identity),
                 ('content', identity),
                 ('edited_at', identity)]
+
+    @classmethod
+    def db_columns_from_client(cls):
+        return [('id', identity),
+                ('language', identity),
+                ('content', identity),
+                ('edited_at', parse_client_timestamp)]
 
     @classmethod
     def table_name(cls):

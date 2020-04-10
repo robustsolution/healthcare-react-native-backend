@@ -10,7 +10,7 @@ def get_ids_and_edit_timestamps(table_name):
 
 def get_table_rows(object_type, ids):
     table_name = object_type.table_name()
-    columns, constructors = zip(*object_type.db_columns())
+    columns, constructors = zip(*object_type.db_columns_from_server())
     column_select_str = ', '.join(columns)
     with get_connection() as conn:
         with conn.cursor() as cur:
@@ -27,3 +27,10 @@ def get_string_ids_and_edit_timestamps():
         with conn.cursor() as cur:
             cur.execute("SELECT id, language, edited_at FROM string_content)")
             return {(id, lang): ts for id, lang, ts in cur}
+
+
+def execute_sql(sql, rows):
+    with get_connection() as conn:
+        with conn.cursor() as cur:
+            for row in rows:
+                cur.execute(sql, row)
