@@ -22,7 +22,7 @@ class IndividualLanguageString(ClientObject):
 
     @classmethod
     def server_insert_sql(cls):
-        return ["INSERT INTO string_ids (id) VALUES (?) ON CONFLICT (id) DO NOTHING;",
+        return ["INSERT INTO string_ids (id) VALUES (%s) ON CONFLICT (id) DO NOTHING;",
                 "INSERT INTO string_content (id, language, content, edited_at) VALUES (%s, %s, %s, %s) ON CONFLICT DO NOTHING"]
 
     def server_insert_values(self):

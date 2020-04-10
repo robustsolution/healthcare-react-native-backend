@@ -6,7 +6,7 @@ from clinics.clinic import Clinic
 from visits.visit import Visit
 from events.event import Event
 from patients.patient import Patient
-from sync.data_access import get_ids_and_edit_timestamps, get_table_rows, get_string_ids_and_edit_timestamps
+from sync.data_access import get_ids_and_edit_timestamps, get_table_rows, get_string_ids_and_edit_timestamps, execute_sql
 import sqlite3
 import itertools
 from util import parse_client_timestamp
@@ -45,6 +45,7 @@ class DbSynchronizer:
             print(data['sql'])
             for v in data['values']:
                 print('    ', v)
+            execute_sql(data['sql'], data['values'])
 
     def _prepare_table_sync(self, object_type):
         table_name = object_type.table_name()
@@ -86,10 +87,6 @@ class DbSynchronizer:
     def _generate_client_add_sql(self, object_type, ids):
         sql = object_type.client_insert_sql()
         values = [obj.client_insert_values() for obj in get_table_rows(object_type, ids)]
-
-        if not values:
-            return []
-
         return self._combine_result_sql_and_values(sql, values)
 
 
@@ -97,6 +94,9 @@ class DbSynchronizer:
         return []
 
     def _combine_result_sql_and_values(self, sql, values):
+        if not values:
+            return []
+
         if isinstance(sql, list):
             result = []
             for i, s in enumerate(sql):

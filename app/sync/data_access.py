@@ -27,3 +27,10 @@ def get_string_ids_and_edit_timestamps():
         with conn.cursor() as cur:
             cur.execute("SELECT id, language, edited_at FROM string_content)")
             return {(id, lang): ts for id, lang, ts in cur}
+
+
+def execute_sql(sql, rows):
+    with get_connection() as conn:
+        with conn.cursor() as cur:
+            for row in rows:
+                cur.execute(sql, row)
