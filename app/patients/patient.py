@@ -33,7 +33,7 @@ class Patient(ClientObject):
         return """INSERT INTO patients (id, given_name, surname, date_of_birth, sex, country, hometown, phone, edited_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"""
 
     @classmethod
-    def db_columns(cls):
+    def db_columns_from_server(cls):
         return [('id', lambda s: s.replace('-', '')),
                 ('given_name', cls.make_language_string),
                 ('surname', cls.make_language_string),
@@ -47,4 +47,3 @@ class Patient(ClientObject):
     @classmethod
     def table_name(cls):
         return "patients"
-

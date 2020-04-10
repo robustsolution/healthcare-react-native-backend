@@ -26,7 +26,7 @@ class Visit(ClientObject):
         return """INSERT INTO visits (id, patient_id, clinic_id, provider_id, check_in_timestamp, check_out_timestamp) VALUES (?, ?, ?, ?, ?, ?)"""
 
     @classmethod
-    def db_columns(cls):
+    def db_columns_from_server(cls):
         return [('id', lambda s: s.replace('-', '')),
                 ('patient_id', lambda s: s.replace('-', '')),
                 ('clinic_id', lambda s: s.replace('-', '')),

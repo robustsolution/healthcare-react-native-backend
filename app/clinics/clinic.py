@@ -19,7 +19,7 @@ class Clinic(ClientObject):
         return """INSERT INTO clinics (id, name, edited_at) VALUES (?, ?, ?)"""
 
     @classmethod
-    def db_columns(cls):
+    def db_columns_from_server(cls):
         return [('id', lambda s: s.replace('-', '')),
                 ('name', lambda x: LanguageString(x, {})),
                 ('edited_at', identity)]
@@ -27,4 +27,3 @@ class Clinic(ClientObject):
     @classmethod
     def table_name(cls):
         return "clinics"
-

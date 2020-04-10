@@ -28,7 +28,7 @@ class Event(ClientObject):
         return """INSERT INTO events (id, patient_id, visit_id, event_type, event_timestamp, event_metadata, edited_at) VALUES (?, ?, ?, ?, ?, ?, ?)"""
 
     @classmethod
-    def db_columns(cls):
+    def db_columns_from_server(cls):
         return [('id', lambda s: s.replace('-', '')),
                 ('patient_id', lambda s: s.replace('-', '')),
                 ('visit_id', lambda s: s.replace('-', '')),

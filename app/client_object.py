@@ -1,13 +1,18 @@
 from datetime import datetime, timezone, date
 from language_strings.language_string import LanguageString
 
+
 class ClientObject:
     @classmethod
     def table_name(cls):
         raise NotImplementedError()
 
     @classmethod
-    def db_columns(cls):
+    def db_columns_from_server(cls):
+        raise NotImplementedError()
+
+    @classmethod
+    def db_columns_from_client(cls):
         raise NotImplementedError()
 
     @classmethod
@@ -15,6 +20,13 @@ class ClientObject:
         raise NotImplementedError()
 
     def client_insert_values(self):
+        raise NotImplementedError()
+
+    @classmethod
+    def server_insert_sql(cls):
+        raise NotImplementedError()
+
+    def server_insert_values(self):
         raise NotImplementedError()
 
     def dependencies(self):
