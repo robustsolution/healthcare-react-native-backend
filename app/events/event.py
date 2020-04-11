@@ -11,7 +11,7 @@ class Event(ClientObject):
     visit_id: str
     event_type: str
     event_timestamp: datetime
-    event_metadata: Dict
+    event_metadata: str
     edited_at: datetime
 
     def client_insert_values(self):
@@ -20,7 +20,7 @@ class Event(ClientObject):
                 self.visit_id,
                 self.event_type,
                 self.format_ts(self.event_timestamp),
-                self.format_json(self.event_metadata),
+                self.event_metadata,
                 self.format_ts(self.edited_at)]
 
     @classmethod
