@@ -8,6 +8,14 @@ from sync.db_sychronization import DbSynchronizer
 mobile_api = Blueprint('mobile_api', __name__, url_prefix='/api')
 
 
+@mobile_api.route('/instances', methods=['GET'])
+def all_instances():
+    return jsonify(
+        [{'name': 'Demo Instance', 'url': 'https://demo-api.hikmahealth.org'},
+         {'name': 'EMA', 'url': 'https://ema-api.hikmahealth.org'}]
+    )
+
+
 @mobile_api.route('/login', methods=['POST'])
 def login():
     params = assert_data_has_keys(request, {'email', 'password'})
