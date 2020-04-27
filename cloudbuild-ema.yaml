@@ -1,0 +1,31 @@
+steps:
+- name: gcr.io/cloud-builders/gcloud
+  dir: app
+  args:
+  - kms
+  - decrypt
+  - --ciphertext-file=hikma-health-22d28719dd41.json.enc
+  - --plaintext-file=hikma-health-22d28719dd41.json
+  - --location=global
+  - --keyring=hikma-ema-keyring
+  - --key=hikma-ema-key
+- name: 'gcr.io/cloud-builders/docker'
+  args: [ 'build', '-t', 'gcr.io/$PROJECT_ID/hikma-health-backend:$COMMIT_SHA-ema',
+          '--build-arg', 'app_env_arg=prod',
+          '--build-arg', 'credential_file_arg=hikma-health-22d28719dd41.json',
+          '--build-arg', 'db_instance_arg=${_DB_INSTANCE}',
+          '--build-arg', 'commit_sha_arg=$COMMIT_SHA',
+          '--build-arg', 'db_password_arg=${_DB_PASSWORD}',
+          '--build-arg', 'photos_storage_bucket_arg=${_PHOTOS_STORAGE_BUCKET}',
+          '.' ]
+  dir: app
+- name: 'gcr.io/cloud-builders/kubectl'
+  env: ['CLOUDSDK_COMPUTE_ZONE=us-east1-c', 'CLOUDSDK_CONTAINER_CLUSTER=ema-cluster']
+  args: ['set', 'image', 'deployment/hikma-health-backend-ema',
+          'hikma-health-backend-ema=gcr.io/$PROJECT_ID/hikma-health-backend:$COMMIT_SHA-ema']
+images:
+- 'gcr.io/$PROJECT_ID/hikma-health-backend:$COMMIT_SHA-ema'
+substitutions:
+  _DB_INSTANCE: 'hikma-health:us-east1:hikma-db-ema'
+options:
+  machineType: 'N1_HIGHCPU_8'
