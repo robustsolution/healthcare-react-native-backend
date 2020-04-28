@@ -19,6 +19,9 @@ ENV DB_INSTANCE=$db_instance_arg
 ARG db_password_arg
 ENV DB_PASSWORD=$db_password_arg
 
+ARG db_name_arg
+ENV DB_NAME=$db_name_arg
+
 ARG credential_file_arg
 ENV GOOGLE_APPLICATION_CREDENTIALS=$credential_file_arg
 

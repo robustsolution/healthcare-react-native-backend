@@ -16,6 +16,7 @@ steps:
           '--build-arg', 'db_instance_arg=${_DB_INSTANCE}',
           '--build-arg', 'commit_sha_arg=$COMMIT_SHA',
           '--build-arg', 'db_password_arg=${_DB_PASSWORD}',
+          '--build-arg', 'db_name_arg=${_DB_NAME}',
           '--build-arg', 'photos_storage_bucket_arg=${_PHOTOS_STORAGE_BUCKET}',
           '.' ]
   dir: app
@@ -27,5 +28,6 @@ images:
 - 'gcr.io/$PROJECT_ID/hikma-health-backend:$COMMIT_SHA'
 substitutions:
   _DB_INSTANCE: 'hikma-health:us-east1:hikma-db-demo'
+  _DB_NAME: 'hikma_prod'
 options:
   machineType: 'N1_HIGHCPU_8'
