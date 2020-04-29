@@ -2,6 +2,7 @@ from flask import Flask, jsonify
 from mobile_api.mobile_api import mobile_api
 from user_api.user_api import user_api
 from photos.photos_api import photos_api
+from admin_api.admin_api import admin_api
 from web_errors import WebError
 from config import FLASK_DEBUG, FLASK_DEBUG_PORT
 import startup_tasks
@@ -12,6 +13,7 @@ app.url_map.strict_slashes = False
 app.register_blueprint(mobile_api)
 app.register_blueprint(user_api)
 app.register_blueprint(photos_api)
+app.register_blueprint(admin_api)
 
 
 @app.route('/')

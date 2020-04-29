@@ -22,6 +22,10 @@ class User:
             return user
 
     @classmethod
+    def from_id(cls, user_id):
+        return cls.from_db_row(db.user_data_by_id(user_id))
+
+    @classmethod
     def from_db_row(cls, db_row):
         id, name, role, email, hashed_password = db_row
         return cls(id, LanguageString.from_id(name), role, email, hashed_password.encode())
@@ -36,3 +40,6 @@ class User:
             'role': self.role,
             'email': self.email,
         }
+
+    def create_token(self):
+        return db.create_token(self.id)

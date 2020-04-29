@@ -3,6 +3,7 @@ from web_errors import WebError
 import bcrypt
 from language_strings.data_access import update_language_string
 from datetime import datetime
+import uuid
 
 
 def user_data_by_email(email):
@@ -13,6 +14,17 @@ def user_data_by_email(email):
             row = cur.fetchone()
             if not row:
                 raise WebError("email not found", status_code=404)
+            return row
+
+
+def user_data_by_id(user_id):
+    with get_connection() as conn:
+        with conn.cursor() as cur:
+            cur.execute('SELECT id, name, role, email, hashed_password FROM users WHERE id = %s',
+                        [user_id])
+            row = cur.fetchone()
+            if not row:
+                raise WebError("id not found", status_code=404)
             return row
 
 
@@ -32,3 +44,28 @@ def add_user(user):
             INSERT INTO users (id, name, role, email, hashed_password, edited_at) VALUES (%s, %s, %s, %s, %s, %s);
             '''
             cur.execute(query, [user.id, user.name.id, user.role, user.email, user.hashed_password, datetime.now()])
+
+
+def create_token(user_id):
+    with get_connection() as conn:
+        with conn.cursor() as cur:
+            token = str(uuid.uuid4())
+            cur.execute('INSERT INTO tokens (user_id, token) VALUES (%s, %s)', [user_id, token])
+            return token
+
+
+def user_id_by_token(token):
+    with get_connection() as conn:
+        with conn.cursor() as cur:
+            cur.execute('SELECT user_id FROM tokens WHERE token = %s AND expiry > now()', [token])
+            result = cur.fetchone()
+            if result:
+                return result[0]
+            else:
+                return None
+
+def all_user_data():
+    with get_connection() as conn:
+        with conn.cursor() as cur:
+            cur.execute('SELECT id, name, role, email, hashed_password FROM users ORDER BY name', [])
+            yield from cur
