@@ -69,3 +69,8 @@ def all_user_data():
         with conn.cursor() as cur:
             cur.execute('SELECT id, name, role, email, hashed_password FROM users ORDER BY name', [])
             yield from cur
+
+def delete_user_by_id(user_id):
+    with get_connection() as conn:
+        with conn.cursor() as cur:
+            cur.execute('DELETE FROM users WHERE id = %s', [user_id])
