@@ -2,7 +2,7 @@ from flask import Blueprint, request, jsonify
 from web_util import assert_data_has_keys, admin_authenticated
 from web_errors import WebError
 from users.user import User
-from users.data_access import all_user_data, add_user
+from users.data_access import all_user_data, add_user, delete_user
 from language_strings.language_string import LanguageString
 
 import uuid
@@ -47,3 +47,10 @@ def create_user(_admin_user):
 
     all_users = [User.from_db_row(r).to_dict() for r in all_user_data()]
     return jsonify({'users': all_users})
+
+
+@admin_api.route('/user', methods=['DELETE'])
+@admin_authenticated
+def delete_user(_admin_user):
+    params = assert_data_has_keys(request, {'email'})
+    did_delete = delete_user
