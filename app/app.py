@@ -1,4 +1,5 @@
 from flask import Flask, jsonify
+from flask_cors import CORS
 from mobile_api.mobile_api import mobile_api
 from user_api.user_api import user_api
 from photos.photos_api import photos_api
@@ -9,6 +10,7 @@ import startup_tasks
 
 
 app = Flask(__name__)
+CORS(app)
 app.url_map.strict_slashes = False
 app.register_blueprint(mobile_api)
 app.register_blueprint(user_api)
