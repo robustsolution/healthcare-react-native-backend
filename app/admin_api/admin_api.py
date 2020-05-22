@@ -4,6 +4,7 @@ from web_errors import WebError
 from users.user import User
 from users.data_access import all_user_data, add_user, delete_user_by_id, user_data_by_email
 from language_strings.language_string import LanguageString
+from admin_api.patient_data_import import PatientDataImporter
 
 import uuid
 import bcrypt
@@ -67,3 +68,11 @@ def change_password(_admin_user):
     user.reset_password(params['new_password'])
     return jsonify({'message': 'ok'})
 
+
+@admin_api.route('/upload', methods=['POST'])
+@admin_authenticated
+def upload_patient_data(_admin_user):
+    if len(request.files) == 0:
+        return jsonify({'message': 'no files :('})
+    else:
+        return jsonify({'message': 'yay, files'})
