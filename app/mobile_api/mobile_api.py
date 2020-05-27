@@ -12,7 +12,8 @@ mobile_api = Blueprint('mobile_api', __name__, url_prefix='/api')
 def all_instances():
     return jsonify(
         [{'name': 'Demo Instance', 'url': 'https://demo-api.hikmahealth.org'},
-         {'name': 'EMA', 'url': 'https://ema-api.hikmahealth.org'}]
+         {'name': 'EMA', 'url': 'https://ema-api.hikmahealth.org'},
+         {'name': 'Local (testing)', 'url': 'http://192.168.86.29'}]
     )
 
 
