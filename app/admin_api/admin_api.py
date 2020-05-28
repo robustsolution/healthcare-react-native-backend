@@ -73,6 +73,8 @@ def change_password(_admin_user):
 @admin_authenticated
 def upload_patient_data(_admin_user):
     if len(request.files) == 0:
-        return jsonify({'message': 'no files :('})
-    else:
-        return jsonify({'message': 'yay, files'})
+        raise WebError('Files must be present', 400)
+
+    importer = PatientDataImporter(request.files['file'])
+    importer.run()
+    return jsonify({'message': 'OK'})
