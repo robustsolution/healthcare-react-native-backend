@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from client_object import ClientObject
 from datetime import datetime
-from util import identity, parse_client_timestamp
+from util import identity, parse_client_timestamp, parse_server_uuid
 
 @dataclass
 class Visit(ClientObject):
@@ -36,13 +36,12 @@ class Visit(ClientObject):
     def server_insert_sql(cls):
         return """INSERT INTO visits (id, patient_id, clinic_id, provider_id, check_in_timestamp, edited_at) VALUES (%s, %s, %s, %s, %s, %s)"""
 
-
     @classmethod
     def db_columns_from_server(cls):
         return [('id', lambda s: s.replace('-', '')),
                 ('patient_id', lambda s: s.replace('-', '')),
                 ('clinic_id', lambda s: s.replace('-', '')),
-                ('provider_id', lambda s: s.replace('-', '')),
+                ('provider_id', parse_server_uuid),
                 ('check_in_timestamp', identity),
                 ('edited_at', identity),
         ]
