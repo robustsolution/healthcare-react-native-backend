@@ -5,6 +5,7 @@ certifi==2019.11.28
 cffi==1.13.2
 chardet==3.0.4
 Click==7.0
+et-xmlfile==1.0.1
 Flask==1.1.1
 Flask-Cors==3.0.8
 google-api-core==1.16.0
@@ -16,9 +17,11 @@ googleapis-common-protos==1.51.0
 gunicorn==19.9.0
 idna==2.9
 itsdangerous==1.1.0
+jdcal==1.4.1
 Jinja2==2.10.1
 Mako==1.1.0
 MarkupSafe==1.1.1
+openpyxl==3.0.3
 protobuf==3.11.3
 psycopg2==2.8.5
 pyasn1==0.4.8
