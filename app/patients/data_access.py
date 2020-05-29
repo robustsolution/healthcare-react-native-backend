@@ -24,7 +24,7 @@ def add_patient(patient: Patient):
                          ])
 
 
-def patient_exists(given_name: str, surname: str, country: str, sex: str):
+def patient_from_key_data(given_name: str, surname: str, country: str, sex: str):
     query = """
     SELECT id FROM patients 
     WHERE get_string(given_name, 'en') = %s AND get_string(surname, 'en') = %s AND get_string(country, 'en') = %s AND sex = %s;
@@ -32,5 +32,7 @@ def patient_exists(given_name: str, surname: str, country: str, sex: str):
     with get_connection() as conn:
         with conn.cursor() as cur:
             cur.execute(query, [given_name, surname, country, sex])
-            id = cur.fetchone()
-            return (id is not None)
+            row = cur.fetchone()
+            if row is None:
+                return None
+            return row[0]
