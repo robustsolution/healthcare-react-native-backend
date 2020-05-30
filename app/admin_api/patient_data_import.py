@@ -186,10 +186,12 @@ class PatientDataImporter:
                 )
                 add_visit(visit)
 
-            self._update_events(patient_id, visit_id, visit_timestamp, row)
+                # Until we implement full deletion, only add visit the first time it is seen.
+                self._update_events(patient_id, visit_id, visit_timestamp, row)
 
     def _update_events(self, patient_id: str, visit_id: str, visit_timestamp: datetime, row: PatientDataRow):
-        clear_all_events(visit_id)
+        # TODO: This will need to be replaced with a mode of deletion that persists through synchronization.
+        # clear_all_events(visit_id)
         if row.allergies:
             self._add_text_event(patient_id, visit_id, visit_timestamp, 'Allergies', row.allergies)
         if any([row.dispensed_medicine_1, row.dispensed_medicine_2,
