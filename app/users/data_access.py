@@ -54,6 +54,12 @@ def create_token(user_id):
             return token
 
 
+def invalidate_all_tokens(user_id):
+    with get_connection() as conn:
+        with conn.cursor() as cur:
+            cur.execute('DELETE FROM tokens WHERE user_id = %s', [user_id])
+
+
 def user_id_by_token(token):
     with get_connection() as conn:
         with conn.cursor() as cur:

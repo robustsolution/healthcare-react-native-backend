@@ -33,6 +33,9 @@ class User:
     def reset_password(self, new_password):
         db.update_password(self.id, new_password)
 
+    def logout(self):
+        db.invalidate_all_tokens(self.id)
+
     def to_dict(self):
         return {
             'id': self.id,

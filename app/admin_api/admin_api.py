@@ -22,6 +22,13 @@ def login():
     return jsonify({'token': token})
 
 
+@admin_api.route('/logout', methods=['POST'])
+@admin_authenticated
+def logout(admin_user: User):
+    admin_user.logout()
+    return jsonify({'message': 'OK'})
+
+
 @admin_api.route('/all_users', methods=['GET'])
 @admin_authenticated
 def get_all_users(_admin_user):
