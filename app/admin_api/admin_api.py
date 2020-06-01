@@ -1,4 +1,4 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, send_file
 from web_util import assert_data_has_keys, admin_authenticated
 from web_errors import WebError
 from users.user import User
@@ -85,3 +85,9 @@ def upload_patient_data(_admin_user):
     importer = PatientDataImporter(request.files['file'])
     importer.run()
     return jsonify({'message': 'OK'})
+
+
+@admin_api.route('/export', methods=['GET'])
+@admin_authenticated
+def export_all_data(_admin_user):
+    return send_file('data/example_export.xlsx', attachment_filename='hikma_export.xlsx')
