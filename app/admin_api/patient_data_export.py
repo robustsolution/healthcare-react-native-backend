@@ -39,7 +39,7 @@ class PatientDataExporter:
             row = PatientDataRow(
                 visit_date=visit.check_in_timestamp,
                 first_name=patient.given_name.get('en'),
-                surname=patient.given_name.get('en'),
+                surname=patient.surname.get('en'),
                 age=self.age_string_from_dob(patient.date_of_birth),
                 gender=patient.sex,
                 home_country=patient.country.get('en')
