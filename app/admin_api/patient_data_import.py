@@ -19,50 +19,6 @@ import itertools
 import json
 from config import DEFAULT_PROVIDER_ID_FOR_IMPORT
 
-@dataclass
-class PatientDataRow:
-    camp: str
-    visit_date: datetime
-    ema_number: int
-    first_name: str
-    surname: str
-    age: str
-    gender: str
-    home_country: str
-    allergies: str
-    medical_hx: str
-    chronic_condition: str
-    current_medication_1: str
-    current_medication_2: str
-    current_medication_3: str
-    current_medication_4: str
-    current_medication_5: str
-    current_medication_6: str
-    presenting_complaint: str
-    heart_rate: float
-    blood_pressure: str
-    o2_sats: float
-    respiratory_rate: float
-    temperature: float
-    blood_glucose: float
-    examination: str
-    diagnosis: str
-    treatment: str
-    dispensed_medicine_1: str
-    dispensed_medicine_quantity_1: str
-    dispensed_medicine_2: str
-    dispensed_medicine_quantity_2: str
-    dispensed_medicine_3: str
-    dispensed_medicine_quantity_3: str
-    dispensed_medicine_4: str
-    dispensed_medicine_quantity_4: str
-    prescription: str
-    follow_up: str
-    referral: str
-    seen_by: str
-    fee: str
-    notes: str
-
 
 COLUMNS = ['camp', 'visit_date', 'ema_number', 'first_name', 'surname', 'age', 'gender', 'home_country', 'allergies',
            'medical_hx', 'chronic_condition', 'current_medication_1', 'current_medication_2', 'current_medication_3',
@@ -72,6 +28,52 @@ COLUMNS = ['camp', 'visit_date', 'ema_number', 'first_name', 'surname', 'age', '
            'dispensed_medicine_quantity_2', 'dispensed_medicine_3', 'dispensed_medicine_quantity_3',
            'dispensed_medicine_4', 'dispensed_medicine_quantity_4', 'prescription', 'follow_up', 'referral', 'seen_by',
            'fee', 'notes']
+
+@dataclass
+class PatientDataRow:
+    camp: str = None
+    visit_date: datetime = None
+    ema_number: int = None
+    first_name: str = None
+    surname: str = None
+    age: str = None
+    gender: str = None
+    home_country: str = None
+    allergies: str = None
+    medical_hx: str = None
+    chronic_condition: str = None
+    current_medication_1: str = None
+    current_medication_2: str = None
+    current_medication_3: str = None
+    current_medication_4: str = None
+    current_medication_5: str = None
+    current_medication_6: str = None
+    presenting_complaint: str = None
+    heart_rate: float = None
+    blood_pressure: str = None
+    o2_sats: float = None
+    respiratory_rate: float = None
+    temperature: float = None
+    blood_glucose: float = None
+    examination: str = None
+    diagnosis: str = None
+    treatment: str = None
+    dispensed_medicine_1: str = None
+    dispensed_medicine_quantity_1: str = None
+    dispensed_medicine_2: str = None
+    dispensed_medicine_quantity_2: str = None
+    dispensed_medicine_3: str = None
+    dispensed_medicine_quantity_3: str = None
+    dispensed_medicine_4: str = None
+    dispensed_medicine_quantity_4: str = None
+    prescription: str = None
+    follow_up: str = None
+    referral: str = None
+    seen_by: str = None
+    fee: str = None
+    notes: str = None
+
+
 
 
 COLUMN_TYPES = [str, None, int, str, str, str, str, str, str, str, str, str, str, str, str, str, str, str, float, str,

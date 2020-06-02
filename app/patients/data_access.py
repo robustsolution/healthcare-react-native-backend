@@ -1,7 +1,7 @@
 from db_util import get_connection
 from patients.patient import Patient
 from language_strings.data_access import update_language_string
-from language_strings.language_string import to_id
+from language_strings.language_string import to_id, LanguageString
 
 
 def add_patient(patient: Patient):
@@ -36,3 +36,28 @@ def patient_from_key_data(given_name: str, surname: str, country: str, sex: str)
             if row is None:
                 return None
             return row[0]
+
+
+def patient_from_id(patient_id):
+    query = """
+    SELECT given_name, surname, date_of_birth, sex, country, hometown, phone, edited_at FROM patients WHERE id = %s
+    """
+    with get_connection() as conn:
+        with conn.cursor() as cur:
+            cur.execute(query, [patient_id])
+            row = cur.fetchone()
+            if row is None:
+                return None
+            given_name, surname, date_of_birth, sex, country, hometown, phone, edited_at = row
+            return Patient(
+                id=patient_id,
+                given_name=LanguageString.from_id(given_name),
+                surname=LanguageString.from_id(surname),
+                date_of_birth=date_of_birth,
+                sex=sex,
+                country=LanguageString.from_id(country),
+                hometown=LanguageString.from_id(hometown),
+                phone=phone,
+                edited_at=edited_at
+            )
+

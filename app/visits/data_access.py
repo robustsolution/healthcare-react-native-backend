@@ -27,3 +27,19 @@ def first_visit_by_patient_and_date(patient_id: str, date: datetime.date) -> Tup
                 return None, None
             else:
                 return row[0], row[1]
+
+
+def all_visits():
+    query = "SELECT id, patient_id, clinic_id, provider_id, check_in_timestamp, edited_at FROM visits ORDER BY check_in_timestamp DESC;"
+    with get_connection() as conn:
+        with conn.cursor() as cur:
+            cur.execute(query, [])
+            for row in cur:
+                yield Visit(
+                    id=row[0],
+                    patient_id=row[1],
+                    clinic_id=row[2],
+                    provider_id=row[3],
+                    check_in_timestamp=row[4],
+                    edited_at=row[5]
+                )
