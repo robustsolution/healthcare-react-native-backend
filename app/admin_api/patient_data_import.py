@@ -108,6 +108,7 @@ class PatientDataImporter:
         handle = NamedTemporaryFile('wb', delete=False, suffix='.xlsx')
         data_file.save(handle)
         handle.close()
+        print('Upload written to', handle.name)
         return handle.name
 
     def iter_data_rows(self):
