@@ -39,8 +39,8 @@ class Visit(ClientObject):
     @classmethod
     def db_columns_from_server(cls):
         return [('id', lambda s: s.replace('-', '')),
-                ('patient_id', lambda s: s.replace('-', '')),
-                ('clinic_id', lambda s: s.replace('-', '')),
+                ('patient_id', parse_server_uuid),
+                ('clinic_id', parse_server_uuid),
                 ('provider_id', parse_server_uuid),
                 ('check_in_timestamp', identity),
                 ('edited_at', identity),
