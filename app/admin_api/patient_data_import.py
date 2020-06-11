@@ -33,7 +33,7 @@ COLUMNS = ['camp', 'visit_date', 'ema_number', 'first_name', 'surname', 'age', '
 class PatientDataRow:
     camp: str = None
     visit_date: datetime = None
-    ema_number: int = None
+    ema_number: str = None
     first_name: str = None
     surname: str = None
     age: str = None
@@ -76,7 +76,7 @@ class PatientDataRow:
 
 
 
-COLUMN_TYPES = [str, None, int, str, str, str, str, str, str, str, str, str, str, str, str, str, str, str, float, str,
+COLUMN_TYPES = [str, None, str, str, str, str, str, str, str, str, str, str, str, str, str, str, str, str, float, str,
                 float, float, float, float, str, str, str, str, str, str, str, str, str, str, str, str, str, str, str,
                 str, str]
 
