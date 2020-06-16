@@ -18,7 +18,8 @@ from datetime import date, timedelta, datetime
 import itertools
 import json
 from config import DEFAULT_PROVIDER_ID_FOR_IMPORT
-
+import pandas as pd
+import dateutil
 
 COLUMNS = ['camp', 'visit_date', 'ema_number', 'first_name', 'surname', 'age', 'gender', 'home_country', 'allergies',
            'medical_hx', 'chronic_condition', 'current_medication_1', 'current_medication_2', 'current_medication_3',
@@ -87,7 +88,9 @@ class PatientDataImporter:
 
     def run(self):
         all_rows = [self._parse_row(row) for row in self.iter_data_rows()]
+        print('Creating patients...')
         self._create_patients(all_rows)
+        print('Creating visits...')
         self._create_visits(all_rows)
 
     def _parse_row(self, row):
@@ -135,12 +138,23 @@ class PatientDataImporter:
             given_name=given_name_ls,
             surname=surname_ls,
             date_of_birth=inferred_dob,
-            sex=sex,
+            sex=self._parse_sex(sex),
             country=LanguageString(id=str(uuid.uuid4()), content_by_language={'en': home_country}),
             phone=None,
             hometown=None
         )
         add_patient(patient)
+
+    @staticmethod
+    def _parse_sex(sex_str):
+        if sex_str is None:
+            return None
+        elif 'm' in sex_str.lower():
+            return 'M'
+        elif 'f' in sex_str.lower():
+            return 'F'
+        else:
+            return None
 
     def _infer_dob(self, age_string):
         try:
@@ -155,8 +169,18 @@ class PatientDataImporter:
             else:
                 # Assume years if no unit is specified
                 return today - timedelta(days=365 * int_prefix)
-        except ValueError:
-            raise WebError('Unparseable age string: ' + age_string, 400)
+        except (ValueError, TypeError):
+            return date(1900, 1, 1)
+
+    @staticmethod
+    def _parse_date(date_str):
+        if isinstance(date_str, date) or isinstance(date_str, datetime):
+            return date_str
+        try:
+            dt = pd.to_datetime(date_str, dayfirst=True).to_pydatetime()
+            return date(year=dt.year, month=dt.month, day=dt.day)
+        except dateutil.parser._parser.ParserError:
+            return None
 
     def _create_visits(self, rows: Iterable[PatientDataRow]):
         for row in rows:
@@ -164,7 +188,8 @@ class PatientDataImporter:
             if not patient_id:
                 print('Warning: unknown patient; skipping.')
                 continue
-            visit_id, visit_timestamp = first_visit_by_patient_and_date(patient_id, row.visit_date)
+            visit_date = self._parse_date(row.visit_date)
+            visit_id, visit_timestamp = first_visit_by_patient_and_date(patient_id, visit_date)
 
             # TODO: The data import format does not currently specify a clinic. Since
             # current Hikma instances are single clinic anyway, just get the most common
@@ -178,7 +203,7 @@ class PatientDataImporter:
 
             if visit_id is None:
                 visit_id = str(uuid.uuid4())
-                visit_timestamp = datetime.combine(row.visit_date, datetime.min.time())
+                visit_timestamp = datetime.combine(visit_date, datetime.min.time())
                 visit = Visit(
                     id=visit_id,
                     patient_id=patient_id,
