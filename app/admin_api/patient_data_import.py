@@ -240,6 +240,8 @@ class PatientDataImporter:
             self._add_text_event(patient_id, visit_id, visit_timestamp, 'Prescriptions', row.prescription)
         if row.notes:
             self._add_text_event(patient_id, visit_id, visit_timestamp, 'Notes', row.notes)
+        if row.camp:
+            self._add_text_event(patient_id, visit_id, visit_timestamp, 'Camp', row.camp)
 
     def _add_text_event(self, patient_id: str, visit_id: str, visit_timestamp: datetime,
                         event_type: str, event_metadata: str):

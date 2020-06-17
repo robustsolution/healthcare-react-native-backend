@@ -63,6 +63,8 @@ class PatientDataExporter:
                     self.write_text_event(row, 'prescription', event.event_metadata)
                 elif event.event_type == 'Notes':
                     self.write_text_event(row, 'notes', event.event_metadata)
+                elif event.event_type == 'Camp':
+                    self.write_text_event(row, 'camp', event.event_metadata)
             yield row
 
     def write_text_event(self, row, key, text):
