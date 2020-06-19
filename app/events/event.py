@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from client_object import ClientObject
 from datetime import datetime
 from typing import Dict
-from util import identity, parse_client_timestamp
+from util import identity, parse_client_timestamp, parse_server_uuid
 
 @dataclass
 class Event(ClientObject):
@@ -43,8 +43,8 @@ class Event(ClientObject):
     @classmethod
     def db_columns_from_server(cls):
         return [('id', lambda s: s.replace('-', '')),
-                ('patient_id', lambda s: s.replace('-', '')),
-                ('visit_id', lambda s: s.replace('-', '')),
+                ('patient_id', parse_server_uuid),
+                ('visit_id', parse_server_uuid),
                 ('event_type', identity),
                 ('event_timestamp', identity),
                 ('event_metadata', identity),
