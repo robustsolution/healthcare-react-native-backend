@@ -32,19 +32,12 @@ class DbSynchronizer:
         return True
 
     def get_client_sql(self):
-        print('Sending SQL to client:')
-        for data in self.client_sql:
-            print(data['sql'])
-            for v in data['values']:
-                print('    ', v)
+        print('Sending SQL to client:', len(self.client_sql), 'commands')
         return self.client_sql
 
     def execute_server_side_sql(self):
-        print('Executing SQL on server:')
+        print('Executing SQL on server:', len(self.server_sql), 'commands')
         for data in self.server_sql:
-            print(data['sql'])
-            for v in data['values']:
-                print('    ', v)
             execute_sql(data['sql'], data['values'])
 
     def _prepare_table_sync(self, object_type):
