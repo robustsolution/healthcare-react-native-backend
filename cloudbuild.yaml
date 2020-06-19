@@ -19,6 +19,7 @@ steps:
           '--build-arg', 'db_name_arg=${_DB_NAME}',
           '--build-arg', 'default_provider_id_arg=${_DEFAULT_PROVIDER_ID}',
           '--build-arg', 'photos_storage_bucket_arg=${_PHOTOS_STORAGE_BUCKET}',
+          '--build-arg', 'exports_storage_bucket_arg=${_EXPORTS_STORAGE_BUCKET}',
           '.' ]
   dir: app
 - name: 'gcr.io/cloud-builders/kubectl'

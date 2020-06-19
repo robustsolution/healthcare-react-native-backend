@@ -5,7 +5,7 @@ from users.user import User
 from users.data_access import all_user_data, add_user, delete_user_by_id, user_data_by_email
 from language_strings.language_string import LanguageString
 from admin_api.patient_data_import import PatientDataImporter
-from admin_api.patient_data_export import PatientDataExporter
+from admin_api.patient_data_export import most_recent_export
 
 import uuid
 import bcrypt
@@ -91,6 +91,5 @@ def upload_patient_data(_admin_user):
 @admin_api.route('/export', methods=['POST'])
 @admin_authenticated
 def export_all_data(_admin_user):
-    exporter = PatientDataExporter()
-    export_filename = exporter.run()
+    export_filename = most_recent_export()
     return send_file(export_filename, attachment_filename='hikma_export.xlsx')

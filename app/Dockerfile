@@ -28,6 +28,9 @@ ENV GOOGLE_APPLICATION_CREDENTIALS=$credential_file_arg
 ARG photos_storage_bucket_arg
 ENV PHOTOS_STORAGE_BUCKET=$photos_storage_bucket_arg
 
+ARG exports_storage_bucket_arg
+ENV EXPORTS_STORAGE_BUCKET=$exports_storage_bucket_arg
+
 ARG default_provider_id_arg
 ENV DEFAULT_PROVIDER_ID=$default_provider_id_arg
 

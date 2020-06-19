@@ -6,6 +6,18 @@ from patients.data_access import patient_from_id
 from datetime import datetime, timedelta
 from tempfile import NamedTemporaryFile
 import json
+from google.cloud import storage
+from config import EXPORTS_STORAGE_BUCKET
+
+
+def most_recent_export():
+    storage_client = storage.Client()
+    blobs = storage_client.list_blobs(EXPORTS_STORAGE_BUCKET)
+    most_recent = max(blobs, key=lambda b: b.name)
+    output = NamedTemporaryFile('wb', suffix='.xlsx', delete=False)
+    output.close()
+    most_recent.download_to_filename(output.name)
+    return output.name
 
 
 class PatientDataExporter:
@@ -17,7 +29,7 @@ class PatientDataExporter:
         worksheet = workbook.get_sheet_by_name('Sheet1')
         for i, row in enumerate(self.iter_data_rows()):
             self.write_row(worksheet, i, row)
-        output = NamedTemporaryFile('wb', delete=False)
+        output = NamedTemporaryFile('wb', suffix='.xlsx', delete=False)
         output.close()
         workbook.save(output.name)
         return output.name
