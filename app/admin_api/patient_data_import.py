@@ -125,7 +125,7 @@ class PatientDataImporter:
     def _create_patients(self, rows: Iterable[PatientDataRow]):
         for patient_data in set(map(lambda r: (r.first_name, r.surname, r.gender, r.home_country, r.age), rows)):
             first_name, surname, gender, home_country, age = patient_data
-            if not patient_from_key_data(first_name, surname, home_country, gender):
+            if not patient_from_key_data(first_name, surname, home_country, self._parse_sex(gender)):
                 self._create_patient(first_name, surname, home_country, gender, age)
 
     def _create_patient(self, given_name, surname, home_country, sex, age):
@@ -184,7 +184,7 @@ class PatientDataImporter:
 
     def _create_visits(self, rows: Iterable[PatientDataRow]):
         for row in rows:
-            patient_id = patient_from_key_data(row.first_name, row.surname, row.home_country, row.gender)
+            patient_id = patient_from_key_data(row.first_name, row.surname, row.home_country, self._parse_sex(row.gender))
             if not patient_id:
                 print('Warning: unknown patient; skipping.')
                 continue

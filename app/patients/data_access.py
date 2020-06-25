@@ -25,13 +25,38 @@ def add_patient(patient: Patient):
 
 
 def patient_from_key_data(given_name: str, surname: str, country: str, sex: str):
-    query = """
-    SELECT id FROM patients 
-    WHERE get_string(given_name, 'en') = %s AND get_string(surname, 'en') = %s AND get_string(country, 'en') = %s AND sex = %s;
-    """
+    where_clauses = []
+    params = []
+    if given_name is not None:
+        where_clauses.append("get_string(given_name, 'en') = %s")
+        params.append(given_name)
+    else:
+        where_clauses.append("get_string(given_name, 'en') is null")
+
+    if surname is not None:
+        where_clauses.append("get_string(surname, 'en') = %s")
+        params.append(surname)
+    else:
+        where_clauses.append("get_string(surname, 'en') is null")
+
+    if country is not None:
+        where_clauses.append("get_string(country, 'en') = %s")
+        params.append(country)
+    else:
+        where_clauses.append("get_string(country, 'en') is null")
+
+    if sex is not None:
+        where_clauses.append("sex = %s")
+        params.append(sex)
+    else:
+        where_clauses.append('sex is null')
+
+    where_clause = ' AND '.join(where_clauses)
+
+    query = f"SELECT id FROM patients WHERE {where_clause};"
     with get_connection() as conn:
         with conn.cursor() as cur:
-            cur.execute(query, [given_name, surname, country, sex])
+            cur.execute(query, params)
             row = cur.fetchone()
             if row is None:
                 return None
