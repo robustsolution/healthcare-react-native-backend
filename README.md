@@ -1,10 +1,9 @@
 Hikma Mobile Application: Server
 ===============================
 
-This repository contains the server-side code for Hikma Health's mobile application. It is an offline-first EHR system
-designed to run on mobile devices and in environments with limited connectivity.
+The Hikma Health platform is a mobile electronic health record system designed for organizations working in low-resource settings to collect and access patient health information. The platform is a lightweight android application that supports offline functionality and multiple languages including Arabic, Spanish, and English. The medical workflows are designed to be intuitive and allow for efficient patient registration and data entry in low-resource, dynamic, and mobile settings.
 
-The corresponding client-side code is located at https://github.com/hikmahealth/hikma-app. Please feel free to file 
+This repository contains the server-side code for Hikma Health's mobile application. The corresponding client-side code is located at https://github.com/hikmahealth/hikma-app. Please feel free to file 
 feature requests and bugs at either location.
 
 
