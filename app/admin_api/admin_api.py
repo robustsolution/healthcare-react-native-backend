@@ -2,6 +2,8 @@ from flask import Blueprint, request, jsonify, send_file
 from web_util import assert_data_has_keys, admin_authenticated
 from web_errors import WebError
 from users.user import User
+from patients.patient import Patient
+from patients.data_access import all_patient_data
 from users.data_access import all_user_data, add_user, delete_user_by_id, user_data_by_email
 from language_strings.language_string import LanguageString
 from admin_api.patient_data_import import PatientDataImporter
@@ -93,3 +95,9 @@ def upload_patient_data(_admin_user):
 def export_all_data(_admin_user):
     export_filename = most_recent_export()
     return send_file(export_filename, attachment_filename='hikma_export.xlsx')
+
+@admin_api.route('/all_patients', methods=['GET'])
+@admin_authenticated
+def get_all_patients(_admin_user):
+    all_patients = [Patient.from_db_row(r).to_dict() for r in all_patient_data()]
+    return jsonify({'patients': all_patients})

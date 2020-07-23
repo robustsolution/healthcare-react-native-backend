@@ -74,3 +74,21 @@ class Patient(ClientObject):
     @classmethod
     def table_name(cls):
         return "patients"
+
+    @classmethod
+    def from_db_row(cls, db_row):
+        id, given_name, surname, date_of_birth, sex, country, hometown, phone, edited_at = db_row
+        return cls(id, LanguageString.from_id(given_name), LanguageString.from_id(surname), date_of_birth, sex, LanguageString.from_id(country), LanguageString.from_id(hometown), phone, edited_at)    
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'given_name': self.given_name.to_dict(),
+            'surname': self.surname.to_dict(),
+            'date_of_birth': self.date_of_birth,
+            'sex': self.sex,
+            'country': self.country.to_dict(),
+            'hometown': self.hometown.to_dict(),
+            'phone': self.phone,
+            'edited_at': self.edited_at
+        }
