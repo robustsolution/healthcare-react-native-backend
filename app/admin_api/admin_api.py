@@ -3,11 +3,12 @@ from web_util import assert_data_has_keys, admin_authenticated
 from web_errors import WebError
 from users.user import User
 from patients.patient import Patient
-from patients.data_access import all_patient_data
+from patients.data_access import all_patient_data, search_patients
 from users.data_access import all_user_data, add_user, delete_user_by_id, user_data_by_email
 from language_strings.language_string import LanguageString
 from admin_api.patient_data_import import PatientDataImporter
 from admin_api.patient_data_export import most_recent_export
+from admin_api.single_patient_data_export import single_patient_export
 
 import uuid
 import bcrypt
@@ -96,8 +97,25 @@ def export_all_data(_admin_user):
     export_filename = most_recent_export()
     return send_file(export_filename, attachment_filename='hikma_export.xlsx')
 
+
 @admin_api.route('/all_patients', methods=['GET'])
 @admin_authenticated
 def get_all_patients(_admin_user):
     all_patients = [Patient.from_db_row(r).to_dict() for r in all_patient_data()]
     return jsonify({'patients': all_patients})
+
+
+@admin_api.route('/search_patients', methods=['POST'])
+@admin_authenticated
+def search(_admin_user):
+    params = assert_data_has_keys(request, {'given_name', 'surname', 'country', 'hometown'})
+    patient = [Patient.from_db_row(r).to_dict() for r in search_patients(params['given_name'], params['surname'], params['country'], params['hometown'])]
+    return jsonify({'patient': patient})
+        
+
+@admin_api.route('/export_patient', methods=['POST'])
+@admin_authenticated
+def export_patient_data(_admin_user):
+    params = assert_data_has_keys(request, {'patient_id'})
+    export_filename = single_patient_export(params['patient_id'])
+    return send_file(export_filename, attachment_filename='hikma_patient_export.xlsx')
