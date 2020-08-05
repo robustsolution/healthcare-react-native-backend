@@ -43,3 +43,19 @@ def all_visits():
                     check_in_timestamp=row[4],
                     edited_at=row[5]
                 )
+
+
+def patient_visits(patient_id: str):
+    query = "SELECT id, patient_id, clinic_id, provider_id, check_in_timestamp, edited_at FROM visits WHERE patient_id = %s ORDER BY check_in_timestamp DESC;"
+    with get_connection() as conn:
+        with conn.cursor() as cur:
+            cur.execute(query, [patient_id])
+            for row in cur:
+                yield Visit(
+                    id=row[0],
+                    patient_id=row[1],
+                    clinic_id=row[2],
+                    provider_id=row[3],
+                    check_in_timestamp=row[4],
+                    edited_at=row[5]
+                )
