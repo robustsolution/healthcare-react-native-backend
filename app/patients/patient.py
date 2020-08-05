@@ -83,12 +83,12 @@ class Patient(ClientObject):
     def to_dict(self):
         return {
             'id': self.id,
-            'given_name': self.given_name.to_dict(),
-            'surname': self.surname.to_dict(),
+            'given_name': self.given_name.to_dict() if self.given_name is not None else None,
+            'surname': self.surname.to_dict() if self.surname is not None else None,
             'date_of_birth': self.date_of_birth,
             'sex': self.sex,
-            'country': self.country.to_dict(),
-            'hometown': self.hometown.to_dict(),
+            'country': self.country.to_dict() if self.country is not None else None,
+            'hometown': self.hometown.to_dict() if self.hometown is not None else None,
             'phone': self.phone,
             'edited_at': self.edited_at
         }
