@@ -11,7 +11,7 @@ from config import EXPORTS_STORAGE_BUCKET
 
 
 def single_patient_export(patient_id: str):
-    return SinglePatientDataExporter.run(SinglePatientDataExporter(), patient_id)
+    return SinglePatientDataExporter().run(patient_id)
 
 
 class SinglePatientDataExporter:
