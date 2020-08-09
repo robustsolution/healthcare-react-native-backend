@@ -13,7 +13,7 @@ def all_instances():
     return jsonify(
         [{'name': 'Demo Instance', 'url': 'https://demo-api.hikmahealth.org'},
          {'name': 'EMA', 'url': 'https://ema-api.hikmahealth.org'},
-         {'name': 'Local (testing)', 'url': 'http://10.0.0.9.:8080'}]
+         {'name': 'Local (testing)', 'url': 'http://192.168.86.250:8080'}]
     )
 
 

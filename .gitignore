@@ -1,4 +1,5 @@
 nohup.out
+*.db
 
 # Credentials
 hikma-health-098c787f1bcd.json
