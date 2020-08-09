@@ -28,4 +28,6 @@ def upgrade():
     op.execute('CREATE INDEX ON tokens (token)')
 
 def downgrade():
-    pass
+    op.execute(
+        '''DROP TABLE tokens;'''
+    )

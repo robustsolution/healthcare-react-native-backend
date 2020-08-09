@@ -85,7 +85,7 @@ def upgrade():
 def downgrade():
     op.execute("DROP TABLE events;")
     op.execute("DROP TABLE visits;")
-    op.execute("DROP TABLE users;")
+    op.execute("DROP TABLE users CASCADE;")
     op.execute("DROP TABLE clinics;")
     op.execute("DROP TABLE patients;")
     op.execute("DROP TABLE string_content;")

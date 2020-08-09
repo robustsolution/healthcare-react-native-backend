@@ -62,3 +62,10 @@ class ClientObject:
     @staticmethod
     def format_date(d: date):
         return str(d)
+
+    @staticmethod
+    def format_bool(b: bool):
+        if bool:
+            return 1
+        else:
+            return 0
