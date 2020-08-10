@@ -6,10 +6,12 @@ def identity(x):
 
 
 def parse_client_timestamp(ts: str):
-    try:
-        return datetime.strptime(ts, '%Y-%m-%dT%H:%M:%S.%fZ').replace(tzinfo=timezone.utc)
-    except ValueError:
-        return datetime.strptime(ts, '%Y-%m-%dT%H:%M:%SZ').replace(tzinfo=timezone.utc)
+    for fmt in ('%Y-%m-%dT%H:%M:%S.%fZ', '%Y-%m-%dT%H:%M:%SZ', '%Y-%m-%d'):
+        try:
+            return datetime.strptime(ts, fmt).replace(tzinfo=timezone.utc)
+        except ValueError:
+            pass
+    raise ValueError('invalid visit date format')        
 
 
 def parse_client_date(date_str: str):
