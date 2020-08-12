@@ -65,7 +65,7 @@ class ClientObject:
 
     @staticmethod
     def format_bool(b: bool):
-        if bool:
+        if b:
             return 1
         else:
             return 0
