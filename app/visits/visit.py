@@ -26,6 +26,19 @@ class Visit(ClientObject):
     def client_insert_sql(cls):
         return """INSERT INTO visits (id, patient_id, clinic_id, provider_id, check_in_timestamp, edited_at, deleted) VALUES (?, ?, ?, ?, ?, ?, ?)"""
 
+    def client_update_values(self):
+        return [self.patient_id,
+                self.clinic_id,
+                self.provider_id,
+                self.format_ts(self.check_in_timestamp),
+                self.format_ts(self.edited_at),
+                self.format_bool(self.deleted),
+                self.id]
+
+    @classmethod
+    def client_update_sql(cls):
+        return """UPDATE visits SET patient_id = ?, clinic_id = ?, provider_id = ?, check_in_timestamp = ?, edited_at = ?, deleted = ? WHERE id = ?"""
+
     def server_insert_values(self):
         return [self.id,
                 self.patient_id,
@@ -38,6 +51,19 @@ class Visit(ClientObject):
     @classmethod
     def server_insert_sql(cls):
         return """INSERT INTO visits (id, patient_id, clinic_id, provider_id, check_in_timestamp, edited_at, deleted) VALUES (%s, %s, %s, %s, %s, %s, %s)"""
+
+    def server_update_values(self):
+        return [self.patient_id,
+                self.clinic_id,
+                self.provider_id,
+                self.check_in_timestamp,
+                self.edited_at,
+                self.deleted,
+                self.id]
+
+    @classmethod
+    def server_update_sql(cls):
+        return """UPDATE visits SET patient_id = %s, clinic_id = %s, provider_id = %s, check_in_timestamp = %s, edited_at = %s, deleted = %s WHERE id  = %s"""
 
     @classmethod
     def db_columns_from_server(cls):

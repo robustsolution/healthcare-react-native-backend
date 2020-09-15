@@ -32,6 +32,22 @@ class Patient(ClientObject):
     def client_insert_sql(cls):
         return """INSERT INTO patients (id, given_name, surname, date_of_birth, sex, country, hometown, phone, edited_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"""
 
+    def client_update_values(self):
+        return [self.format_string(self.given_name),
+                self.format_string(self.surname),
+                self.format_date(self.date_of_birth),
+                self.sex,
+                self.format_string(self.country),
+                self.format_string(self.hometown),
+                self.phone,
+                self.format_ts(self.edited_at),
+                self.id]
+
+    @classmethod
+    def client_update_sql(cls):
+        return """UPDATE patients SET given_name = ?, surname = ?, date_of_birth = ?, sex = ?, country = ?, hometown = ?, phone = ?, edited_at = ? WHERE id = ?"""
+            
+
     def server_insert_values(self):
         return [self.id,
                 self.format_string(self.given_name),
@@ -46,6 +62,22 @@ class Patient(ClientObject):
     @classmethod
     def server_insert_sql(cls):
         return """INSERT INTO patients (id, given_name, surname, date_of_birth, sex, country, hometown, phone, edited_at) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"""
+
+    def server_update_values(self):
+        return [self.format_string(self.given_name),
+                self.format_string(self.surname),
+                self.date_of_birth,
+                self.sex,
+                self.format_string(self.country),
+                self.format_string(self.hometown),
+                self.phone,
+                self.edited_at,
+                self.id]
+
+    @classmethod
+    def server_update_sql(cls):
+        return """UPDATE patients SET given_name = %s, surname = %s, date_of_birth = %s, sex = %s, country = %s, hometown = %s, phone = %s, edited_at = %s WHERE id = %s"""
+
 
     @classmethod
     def db_columns_from_server(cls):

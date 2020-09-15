@@ -63,11 +63,11 @@ class DbSynchronizer:
 
         self.server_sql.extend(itertools.chain(
             self._generate_server_add_sql(object_type, to_add_to_server),
-            self._generate_server_update_sql(object_type, to_add_to_server)))
+            self._generate_server_update_sql(object_type, to_update_on_server)))
 
         self.client_sql.extend(itertools.chain(
             self._generate_client_add_sql(object_type, to_add_to_client),
-            self._generate_client_update_sql(object_type, to_add_to_client)))
+            self._generate_client_update_sql(object_type, to_update_on_client)))
 
     def _generate_server_add_sql(self, object_type, ids):
         sql = object_type.server_insert_sql()
@@ -75,7 +75,9 @@ class DbSynchronizer:
         return self._combine_result_sql_and_values(sql, values)
 
     def _generate_server_update_sql(self, object_type, ids):
-        return []
+        sql = object_type.server_update_sql()
+        values = [obj.server_update_values() for obj in self._get_client_table_rows(object_type, ids)]
+        return self._combine_result_sql_and_values(sql, values)
 
     def _generate_client_add_sql(self, object_type, ids):
         sql = object_type.client_insert_sql()
@@ -84,7 +86,9 @@ class DbSynchronizer:
 
 
     def _generate_client_update_sql(self, object_type, ids):
-        return []
+        sql = object_type.client_update_sql()
+        values = [obj.client_update_values() for obj in get_table_rows(object_type, ids)]
+        return self._combine_result_sql_and_values(sql, values)
 
     def _combine_result_sql_and_values(self, sql, values):
         if not values:

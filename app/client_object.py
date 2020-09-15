@@ -23,11 +23,25 @@ class ClientObject:
         raise NotImplementedError()
 
     @classmethod
+    def client_update_sql(cls):
+        raise NotImplementedError()
+
+    def client_update_values(self):
+        raise NotImplementedError()
+
+    @classmethod
     def server_insert_sql(cls):
         raise NotImplementedError()
 
     def server_insert_values(self):
         raise NotImplementedError()
+
+    @classmethod
+    def server_update_sql(cls):
+        raise NotImplementedError()
+
+    def server_update_values(self):
+        raise NotImplementedError()    
 
     def dependencies(self):
         """

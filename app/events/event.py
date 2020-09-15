@@ -27,6 +27,19 @@ class Event(ClientObject):
     def client_insert_sql(cls):
         return """INSERT INTO events (id, patient_id, visit_id, event_type, event_timestamp, event_metadata, edited_at) VALUES (?, ?, ?, ?, ?, ?, ?)"""
 
+    def client_update_values(self):
+        return [self.patient_id,
+                self.visit_id,
+                self.event_type,
+                self.format_ts(self.event_timestamp),
+                self.event_metadata,
+                self.format_ts(self.edited_at),
+                self.id]
+
+    @classmethod
+    def client_update_sql(cls):
+        return """UPDATE events SET patient_id = ?, visit_id = ?, event_type = ?, event_timestamp = ?, event_metadata = ?, edited_at = ? WHERE id = ?"""            
+
     def server_insert_values(self):
         return [self.id,
                 self.patient_id,
@@ -39,6 +52,19 @@ class Event(ClientObject):
     @classmethod
     def server_insert_sql(cls):
         return """INSERT INTO events (id, patient_id, visit_id, event_type, event_timestamp, event_metadata, edited_at) VALUES (%s, %s, %s, %s, %s, %s, %s)"""
+
+    def server_update_values(self):
+        return [self.patient_id,
+                self.visit_id,
+                self.event_type,
+                self.event_timestamp,
+                self.event_metadata,
+                self.edited_at,
+                self.id]
+
+    @classmethod
+    def server_update_sql(cls):
+        return """UPDATE events SET patient_id = %s, visit_id = %s, event_type = %s, event_timestamp = %s, event_metadata = %s, edited_at = %s WHERE id = %s"""               
 
     @classmethod
     def db_columns_from_server(cls):
