@@ -15,6 +15,8 @@ def parse_client_timestamp(ts: str):
 
 
 def parse_client_date(date_str: str):
+    if not date_str:
+        return None
     return date.fromisoformat(date_str)
 
 
