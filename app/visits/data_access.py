@@ -30,7 +30,7 @@ def first_visit_by_patient_and_date(patient_id: str, date: datetime.date) -> Tup
 
 
 def all_visits():
-    query = "SELECT id, patient_id, clinic_id, provider_id, check_in_timestamp, edited_at FROM visits WHERE not deleted ORDER BY check_in_timestamp DESC;"
+    query = "SELECT id, patient_id, clinic_id, provider_id, check_in_timestamp, edited_at, deleted FROM visits WHERE not deleted ORDER BY check_in_timestamp DESC;"
     with get_connection() as conn:
         with conn.cursor() as cur:
             cur.execute(query, [])
@@ -41,12 +41,13 @@ def all_visits():
                     clinic_id=row[2],
                     provider_id=row[3],
                     check_in_timestamp=row[4],
-                    edited_at=row[5]
+                    edited_at=row[5],
+                    deleted=row[6]
                 )
 
 
 def patient_visits(patient_id: str):
-    query = "SELECT id, patient_id, clinic_id, provider_id, check_in_timestamp, edited_at FROM visits WHERE patient_id = %s AND not deleted ORDER BY check_in_timestamp DESC;"
+    query = "SELECT id, patient_id, clinic_id, provider_id, check_in_timestamp, edited_at, deleted FROM visits WHERE patient_id = %s AND not deleted ORDER BY check_in_timestamp DESC;"
     with get_connection() as conn:
         with conn.cursor() as cur:
             cur.execute(query, [patient_id])
@@ -57,5 +58,6 @@ def patient_visits(patient_id: str):
                     clinic_id=row[2],
                     provider_id=row[3],
                     check_in_timestamp=row[4],
-                    edited_at=row[5]
+                    edited_at=row[5],
+                    deleted=row[6]
                 )
