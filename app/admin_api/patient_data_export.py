@@ -61,6 +61,8 @@ class PatientDataExporter:
                     self.write_text_event(row, 'allergies', event.event_metadata)
                 elif event.event_type == 'Medicine Dispensed':
                     self.write_text_event(row, 'dispensed_medicine_1', event.event_metadata)
+                elif event.event_type == 'Medical History':
+                    self.write_text_event(row, 'medical_hx', event.event_metadata)
                 elif event.event_type == 'Complaint':
                     self.write_text_event(row, 'presenting_complaint', event.event_metadata)
                 elif event.event_type == 'Vitals':

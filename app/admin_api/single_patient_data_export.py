@@ -41,7 +41,7 @@ class SinglePatientDataExporter:
                 continue
             patient = patient_from_id(visit.patient_id)
             if not patient:
-                continue
+                continue    
             row = PatientDataRow(
                 visit_date=visit.check_in_timestamp,
                 first_name=patient.given_name.get('en'),
@@ -57,6 +57,9 @@ class SinglePatientDataExporter:
                 elif event.event_type == 'Medicine Dispensed':
                     self.write_text_event(
                         row, 'dispensed_medicine_1', event.event_metadata)
+                elif event.event_type == 'Medical History':
+                    self.write_text_event(
+                        row, 'medical_hx', event.event_metadata)
                 elif event.event_type == 'Complaint':
                     self.write_text_event(
                         row, 'presenting_complaint', event.event_metadata)
@@ -94,6 +97,8 @@ class SinglePatientDataExporter:
         row.blood_glucose = data.get('bloodGlucose')
 
     def age_string_from_dob(self, dob):
+        if dob is None:
+            return 'unknown'
         age = datetime.now() - datetime(dob.year, dob.month, dob.day)
         if age < timedelta(days=365):
             return f'{(age.days // 30) + 1} months'
