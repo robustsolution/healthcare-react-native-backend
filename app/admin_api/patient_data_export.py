@@ -93,6 +93,8 @@ class PatientDataExporter:
         row.blood_glucose = data.get('bloodGlucose')
 
     def age_string_from_dob(self, dob):
+        if dob is None:
+            return 'unknown'
         age = datetime.now() - datetime(dob.year, dob.month, dob.day)
         if age < timedelta(days=365):
             return f'{(age.days // 30) + 1} months'
