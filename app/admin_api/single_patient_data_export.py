@@ -1,8 +1,9 @@
 from admin_api.patient_data_import import PatientDataRow, COLUMNS
 from visits.data_access import patient_visits
 from openpyxl import load_workbook
-from events.data_access import events_by_visit
+from events.data_access import events_by_visit, camp_by_patient
 from patients.data_access import patient_from_id
+from events.event_export import write_vitals_event, write_medical_hx_event, write_examination_event, write_med1_event, write_med2_event, write_med3_event, write_physiotherapy_event, write_covid_19_event
 from datetime import datetime, timedelta
 from tempfile import NamedTemporaryFile
 import json
@@ -50,37 +51,50 @@ class SinglePatientDataExporter:
                 gender=patient.sex,
                 home_country=patient.country.get('en')
             )
+            camp_event = camp_by_patient(patient_id)
+            if camp_event is not None:
+                self.write_text_event(row, 'camp', camp_event.event_metadata)
             for event in events_by_visit(visit.id):
-                if event.event_type == 'Allergies':
-                    self.write_text_event(
-                        row, 'allergies', event.event_metadata)
-                elif event.event_type == 'Medicine Dispensed':
-                    self.write_text_event(
-                        row, 'dispensed_medicine_1', event.event_metadata)
-                elif event.event_type == 'Medical History':
-                    self.write_text_event(
-                        row, 'medical_hx', event.event_metadata)
-                elif event.event_type == 'Complaint':
-                    self.write_text_event(
-                        row, 'presenting_complaint', event.event_metadata)
+                if event.event_type == 'Visit Type':
+                    self.write_text_event(row, 'visit_type', event.event_metadata)
+                elif event.event_type == 'Medical History Full':
+                    write_medical_hx_event(row, event)
                 elif event.event_type == 'Vitals':
-                    self.write_vitals_event(row, event)
-                elif event.event_type == 'Examination':
-                    self.write_text_event(
-                        row, 'examination', event.event_metadata)
-                elif event.event_type == 'Diagnosis':
-                    self.write_text_event(
-                        row, 'diagnosis', event.event_metadata)
-                elif event.event_type == 'Treatment':
-                    self.write_text_event(
-                        row, 'treatment', event.event_metadata)
-                elif event.event_type == 'Prescriptions':
-                    self.write_text_event(
-                        row, 'prescription', event.event_metadata)
+                    write_vitals_event(row, event)
+                elif event.event_type == 'Examination Full':
+                    write_examination_event(row, event)
+                elif event.event_type == 'Physiotherapy':
+                    write_physiotherapy_event(row, event)
+                elif event.event_type == 'Medicine':
+                    if row.medication_1 is None:
+                        write_med1_event(row, event)
+                    elif row.medication_2 is None:
+                        write_med2_event(row, event)
+                    elif row.medication_3 is None:
+                        write_med3_event(row, event)
                 elif event.event_type == 'Notes':
                     self.write_text_event(row, 'notes', event.event_metadata)
-                elif event.event_type == 'Camp':
-                    self.write_text_event(row, 'camp', event.event_metadata)
+                elif event.event_type == 'Dental Treatment':
+                    self.write_text_event(row, 'dental_treatment', event.event_metadata)
+                elif event.event_type == 'Complaint':
+                    self.write_text_event(row, 'complaint', event.event_metadata)
+                elif event.event_type == 'COVID-19 Screening':
+                    write_covid_19_event(row, event)
+
+                elif event.event_type == 'Allergies':
+                    self.write_text_event(row, 'allergies_d', event.event_metadata)
+                elif event.event_type == 'Medicine Dispensed':
+                    self.write_text_event(row, 'medicine_dispensed_d', event.event_metadata)
+                elif event.event_type == 'Medical History':
+                    self.write_text_event(row, 'medical_hx_d', event.event_metadata)
+                elif event.event_type == 'Examination':
+                    self.write_text_event(row, 'examination_d', event.event_metadata)
+                elif event.event_type == 'Diagnosis':
+                    self.write_text_event(row, 'diagnosis_d', event.event_metadata)
+                elif event.event_type == 'Treatment':
+                    self.write_text_event(row, 'treatment_d', event.event_metadata)
+                elif event.event_type == 'Prescriptions':
+                    self.write_text_event(row, 'prescriptions_d', event.event_metadata)
             yield row
 
     def write_text_event(self, row, key, text):

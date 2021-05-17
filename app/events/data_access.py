@@ -42,3 +42,27 @@ def events_by_visit(visit_id: str):
                     event_metadata=event_metadata,
                     edited_at=edited_at
                 )
+
+def camp_by_patient(patient_id: str):
+    query = """
+    SELECT id, visit_id, event_type, event_timestamp, event_metadata, edited_at FROM events
+    WHERE patient_id = %s AND event_type = 'Camp'
+    ORDER BY event_timestamp
+    DESC LIMIT 1
+    """
+    with get_connection() as conn:
+        with conn.cursor() as cur:
+            cur.execute(query, [patient_id])
+            row = cur.fetchone()
+            if row is None:
+                return None
+            id, visit_id, event_type, event_timestamp, event_metadata, edited_at = row
+            return Event(
+                id=id,
+                patient_id=patient_id,
+                visit_id=visit_id,
+                event_type=event_type,
+                event_timestamp=event_timestamp,
+                event_metadata=event_metadata,
+                edited_at=edited_at
+            )

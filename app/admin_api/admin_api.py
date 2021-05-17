@@ -6,7 +6,6 @@ from patients.patient import Patient
 from patients.data_access import all_patient_data, search_patients
 from users.data_access import all_user_data, add_user, delete_user_by_id, user_data_by_email
 from language_strings.language_string import LanguageString
-from admin_api.patient_data_import import PatientDataImporter
 from admin_api.patient_data_export import most_recent_export
 from admin_api.single_patient_data_export import single_patient_export
 
@@ -80,15 +79,15 @@ def change_password(_admin_user):
     return jsonify({'message': 'ok'})
 
 
-@admin_api.route('/upload', methods=['POST'])
-@admin_authenticated
-def upload_patient_data(_admin_user):
-    if len(request.files) == 0:
-        raise WebError('Files must be present', 400)
+# @admin_api.route('/upload', methods=['POST'])
+# @admin_authenticated
+# def upload_patient_data(_admin_user):
+#     if len(request.files) == 0:
+#         raise WebError('Files must be present', 400)
 
-    importer = PatientDataImporter(request.files['file'])
-    importer.run()
-    return jsonify({'message': 'OK'})
+#     importer = PatientDataImporter(request.files['file'])
+#     importer.run()
+#     return jsonify({'message': 'OK'})
 
 
 @admin_api.route('/export', methods=['POST'])
