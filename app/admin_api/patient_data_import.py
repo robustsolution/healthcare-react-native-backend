@@ -27,9 +27,12 @@ COLUMNS = [
     'visit_type',
     'first_name',
     'surname',
+		'date_of_birth',
     'age',
     'gender',
+		'hometown',
     'home_country',
+		'phone',
     # medical hx
     'doctor_mh',
     'allergies',
@@ -103,9 +106,12 @@ class PatientDataRow:
     visit_type: str = None
     first_name: str = None
     surname: str = None
+    date_of_birth: str = None
     age: str = None
     gender: str = None
+    hometown: str = None
     home_country: str = None
+    phone: str = None
     doctor_mh: str = None
     allergies: str = None
     surgery_hx: str = None

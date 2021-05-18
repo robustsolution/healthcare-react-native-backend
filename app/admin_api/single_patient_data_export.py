@@ -44,12 +44,15 @@ class SinglePatientDataExporter:
             if not patient:
                 continue    
             row = PatientDataRow(
-                visit_date=visit.check_in_timestamp,
+                visit_date=visit.check_in_timestamp.strftime("%Y-%m-%d"),
                 first_name=patient.given_name.get('en'),
                 surname=patient.surname.get('en'),
+								date_of_birth=patient.date_of_birth.strftime("%Y-%m-%d"),
                 age=self.age_string_from_dob(patient.date_of_birth),
                 gender=patient.sex,
-                home_country=patient.country.get('en')
+                hometown=patient.hometown.get('en'),
+                home_country=patient.country.get('en'),
+								phone=patient.phone,
             )
             camp_event = camp_by_patient(patient_id)
             if camp_event is not None:
