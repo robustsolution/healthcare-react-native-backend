@@ -53,19 +53,20 @@ class PatientDataExporter:
                 visit_date=visit.check_in_timestamp.strftime("%Y-%m-%d"),
                 first_name=patient.given_name.get('en'),
                 surname=patient.surname.get('en'),
-								date_of_birth=patient.date_of_birth.strftime("%Y-%m-%d"),
+                date_of_birth=self.format_date(patient.date_of_birth),
                 age=self.age_string_from_dob(patient.date_of_birth),
                 gender=patient.sex,
                 hometown=patient.hometown.get('en'),
                 home_country=patient.country.get('en'),
-								phone=patient.phone,
+                phone=patient.phone,
             )
             camp_event = camp_by_patient(visit.patient_id)
             if camp_event is not None:
                 self.write_text_event(row, 'camp', camp_event.event_metadata)
             for event in events_by_visit(visit.id):
                 if event.event_type == 'Visit Type':
-                    self.write_text_event(row, 'visit_type', event.event_metadata)
+                    self.write_text_event(
+                        row, 'visit_type', event.event_metadata)
                 elif event.event_type == 'Medical History Full':
                     write_medical_hx_event(row, event)
                 elif event.event_type == 'Vitals':
@@ -84,26 +85,35 @@ class PatientDataExporter:
                 elif event.event_type == 'Notes':
                     self.write_text_event(row, 'notes', event.event_metadata)
                 elif event.event_type == 'Dental Treatment':
-                    self.write_text_event(row, 'dental_treatment', event.event_metadata)
+                    self.write_text_event(
+                        row, 'dental_treatment', event.event_metadata)
                 elif event.event_type == 'Complaint':
-                    self.write_text_event(row, 'complaint', event.event_metadata)
+                    self.write_text_event(
+                        row, 'complaint', event.event_metadata)
                 elif event.event_type == 'COVID-19 Screening':
                     write_covid_19_event(row, event)
 
                 elif event.event_type == 'Allergies':
-                    self.write_text_event(row, 'allergies_d', event.event_metadata)
+                    self.write_text_event(
+                        row, 'allergies_d', event.event_metadata)
                 elif event.event_type == 'Medicine Dispensed':
-                    self.write_text_event(row, 'medicine_dispensed_d', event.event_metadata)
+                    self.write_text_event(
+                        row, 'medicine_dispensed_d', event.event_metadata)
                 elif event.event_type == 'Medical History':
-                    self.write_text_event(row, 'medical_hx_d', event.event_metadata)
+                    self.write_text_event(
+                        row, 'medical_hx_d', event.event_metadata)
                 elif event.event_type == 'Examination':
-                    self.write_text_event(row, 'examination_d', event.event_metadata)
+                    self.write_text_event(
+                        row, 'examination_d', event.event_metadata)
                 elif event.event_type == 'Diagnosis':
-                    self.write_text_event(row, 'diagnosis_d', event.event_metadata)
+                    self.write_text_event(
+                        row, 'diagnosis_d', event.event_metadata)
                 elif event.event_type == 'Treatment':
-                    self.write_text_event(row, 'treatment_d', event.event_metadata)
+                    self.write_text_event(
+                        row, 'treatment_d', event.event_metadata)
                 elif event.event_type == 'Prescriptions':
-                    self.write_text_event(row, 'prescriptions_d', event.event_metadata)
+                    self.write_text_event(
+                        row, 'prescriptions_d', event.event_metadata)
             yield row
 
     def write_text_event(self, row, key, text):
@@ -126,3 +136,9 @@ class PatientDataExporter:
         if age < timedelta(days=365):
             return f'{(age.days // 30) + 1} months'
         return f'{(age.days // 365)} years'
+
+    def format_date(self, date):
+        if date is None:
+            return 'unknown'
+        else:
+            return date.strftime("%Y-%m-%d")
