@@ -2,6 +2,7 @@ from db_util import get_connection
 from web_errors import WebError
 import bcrypt
 from language_strings.data_access import update_language_string
+from language_strings.language_string import LanguageString
 from datetime import datetime
 import uuid
 
@@ -26,6 +27,16 @@ def user_data_by_id(user_id):
             if not row:
                 raise WebError("id not found", status_code=404)
             return row
+
+def user_name_by_id(user_id):
+    with get_connection() as conn:
+        with conn.cursor() as cur:
+            cur.execute('SELECT name FROM users WHERE id = %s',
+                        [user_id])
+            row = cur.fetchone()
+            if not row:
+                return None
+            return LanguageString.from_id(row)
 
 
 def update_password(user_id, new_password):

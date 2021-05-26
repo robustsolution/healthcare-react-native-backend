@@ -17,7 +17,6 @@ def get_text_field(data, field, text_field):
 
 def write_vitals_event(row: PatientDataRow, event):
     data = json.loads(event.event_metadata)
-    row.doctor_v = data.get('doctor')
     row.heart_rate = data.get('heartRate')
     if data.get('systolic') and data.get('diastolic'):
         row.blood_pressure = f"{data.get('systolic')}/{data.get('diastolic')}"
@@ -29,7 +28,6 @@ def write_vitals_event(row: PatientDataRow, event):
 
 def write_medical_hx_event(row: PatientDataRow, event):
     data = json.loads(event.event_metadata)
-    row.doctor_mh = data.get('doctor')
     row.allergies = data.get('allergies')
     row.surgery_hx = data.get('surgeryHx')
     row.chronic_conditions = data.get('chronicConditions')
@@ -38,7 +36,6 @@ def write_medical_hx_event(row: PatientDataRow, event):
 
 def write_examination_event(row: PatientDataRow, event):
     data = json.loads(event.event_metadata)
-    row.doctor_e = data.get('doctor')
     row.examination = data.get('examination')
     row.general_observations = data.get('generalObservations')
     row.diagnosis = data.get('diagnosis')
@@ -48,7 +45,6 @@ def write_examination_event(row: PatientDataRow, event):
 
 def write_med1_event(row: PatientDataRow, event):
     data = json.loads(event.event_metadata)
-    row.doctor_m1 = data.get('doctor')
     row.medication_1 = data.get('medication')
     row.type_1 = data.get('type')
     row.dosage_1 = data.get('dosage')
@@ -56,7 +52,6 @@ def write_med1_event(row: PatientDataRow, event):
 
 def write_med2_event(row: PatientDataRow, event):
     data = json.loads(event.event_metadata)
-    row.doctor_m2 = data.get('doctor')
     row.medication_2 = data.get('medication')
     row.type_2 = data.get('type')
     row.dosage_2 = data.get('dosage')
@@ -64,15 +59,27 @@ def write_med2_event(row: PatientDataRow, event):
 
 def write_med3_event(row: PatientDataRow, event):
     data = json.loads(event.event_metadata)
-    row.doctor_m3 = data.get('doctor')
     row.medication_3 = data.get('medication')
     row.type_3 = data.get('type')
     row.dosage_3 = data.get('dosage')
     row.days_3 = data.get('days')
+		
+def write_med4_event(row: PatientDataRow, event):
+    data = json.loads(event.event_metadata)
+    row.medication_4 = data.get('medication')
+    row.type_4 = data.get('type')
+    row.dosage_4 = data.get('dosage')
+    row.days_4 = data.get('days')
+
+def write_med5_event(row: PatientDataRow, event):
+    data = json.loads(event.event_metadata)
+    row.medication_5 = data.get('medication')
+    row.type_5 = data.get('type')
+    row.dosage_5 = data.get('dosage')
+    row.days_5 = data.get('days')
 
 def write_physiotherapy_event(row: PatientDataRow, event):
     data = json.loads(event.event_metadata)
-    row.doctor_p = data.get('doctor')
     row.previous_treatment = get_text_field(data, 'previousTreatment', 'previousTreatmentText')
     row.complaint_p = data.get('complaint')
     row.findings = data.get('findings')

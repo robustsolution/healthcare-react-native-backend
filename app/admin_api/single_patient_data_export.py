@@ -3,7 +3,8 @@ from visits.data_access import patient_visits
 from openpyxl import load_workbook
 from events.data_access import events_by_visit, camp_by_patient
 from patients.data_access import patient_from_id
-from events.event_export import write_vitals_event, write_medical_hx_event, write_examination_event, write_med1_event, write_med2_event, write_med3_event, write_physiotherapy_event, write_covid_19_event
+from users.data_access import user_name_by_id
+from events.event_export import write_vitals_event, write_medical_hx_event, write_examination_event, write_med1_event, write_med2_event, write_med3_event, write_med4_event, write_med5_event, write_physiotherapy_event, write_covid_19_event
 from datetime import datetime, timedelta
 from tempfile import NamedTemporaryFile
 import json
@@ -44,7 +45,7 @@ class SinglePatientDataExporter:
             if not patient:
                 continue
             row = PatientDataRow(
-                visit_date=visit.check_in_timestamp.strftime("%Y-%m-%d"),
+                visit_date=visit.check_in_timestamp.strftime("%d-%m-%Y"),
                 first_name=patient.given_name.get('en'),
                 surname=patient.surname.get('en'),
                 date_of_birth=self.format_date(patient.date_of_birth),
@@ -54,6 +55,9 @@ class SinglePatientDataExporter:
                 home_country=patient.country.get('en'),
                 phone=patient.phone,
             )
+            provider = user_name_by_id(visit.provider_id)
+            if provider is not None:
+                self.write_text_event(row, 'doctor', provider.get('en'))   
             camp_event = camp_by_patient(patient_id)
             if camp_event is not None:
                 self.write_text_event(row, 'camp', camp_event.event_metadata)
@@ -76,6 +80,10 @@ class SinglePatientDataExporter:
                         write_med2_event(row, event)
                     elif row.medication_3 is None:
                         write_med3_event(row, event)
+                    elif row.medication_4 is None:
+                        write_med4_event(row, event)
+                    elif row.medication_5 is None:
+                        write_med5_event(row, event)        
                 elif event.event_type == 'Notes':
                     self.write_text_event(row, 'notes', event.event_metadata)
                 elif event.event_type == 'Dental Treatment':
@@ -86,7 +94,6 @@ class SinglePatientDataExporter:
                         row, 'complaint', event.event_metadata)
                 elif event.event_type == 'COVID-19 Screening':
                     write_covid_19_event(row, event)
-
                 elif event.event_type == 'Allergies':
                     self.write_text_event(
                         row, 'allergies_d', event.event_metadata)
@@ -135,4 +142,4 @@ class SinglePatientDataExporter:
         if date is None:
             return 'unknown'
         else:
-            return date.strftime("%Y-%m-%d")
+            return date.strftime("%d-%m-%Y")

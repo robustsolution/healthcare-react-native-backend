@@ -27,23 +27,22 @@ COLUMNS = [
     'visit_type',
     'first_name',
     'surname',
-		'date_of_birth',
+    'date_of_birth',
     'age',
     'gender',
-		'hometown',
+    'hometown',
     'home_country',
-		'phone',
+    'phone',
+    'doctor',
     # medical hx
-    'doctor_mh',
     'allergies',
     'surgery_hx',
     'chronic_conditions',
     'current_medications',
     'vaccinations',
-    #complaint
+    # complaint
     'complaint',
     # vitals
-    'doctor_v',
     'heart_rate',
     'blood_pressure',
     'sats',
@@ -52,7 +51,6 @@ COLUMNS = [
     'weight',
     'blood_glucose',
     # examination
-    'doctor_e',
     'examination',
     'general_observations',
     'diagnosis',
@@ -60,25 +58,31 @@ COLUMNS = [
     'covid_19',
     'referral',
     # medicines_1
-    'doctor_m1',
     'medication_1',
     'type_1',
     'dosage_1',
     'days_1',
     # medicines_2
-    'doctor_m2',
     'medication_2',
     'type_2',
     'dosage_2',
     'days_2',
     # medicines_3
-    'doctor_m3',
     'medication_3',
     'type_3',
     'dosage_3',
     'days_3',
+    # medicines_4
+    'medication_4',
+    'type_4',
+    'dosage_4',
+    'days_4',
+    # medicines_5
+    'medication_5',
+    'type_5',
+    'dosage_5',
+    'days_5',
     # physiotherapy
-    'doctor_p',
     'previous_treatment',
     'complaint_p',
     'findings',
@@ -112,14 +116,13 @@ class PatientDataRow:
     hometown: str = None
     home_country: str = None
     phone: str = None
-    doctor_mh: str = None
+    doctor: str = None
     allergies: str = None
     surgery_hx: str = None
     chronic_conditions: str = None
     current_medications: str = None
     vaccinations: str = None
     complaint: str = None
-    doctor_v: str = None
     heart_rate: str = None
     blood_pressure: str = None
     sats: str = None
@@ -127,29 +130,32 @@ class PatientDataRow:
     respiratory_rate: str = None
     weight: str = None
     blood_glucose: str = None
-    doctor_e: str = None
     examination: str = None
     general_observations: str = None
     diagnosis: str = None
     treatment: str = None
     covid_19: str = None
     referral: str = None
-    doctor_m1: str = None
     medication_1: str = None
     type_1: str = None
     dosage_1: str = None
     days_1: str = None
-    doctor_m2: str = None
     medication_2: str = None
     type_2: str = None
     dosage_2: str = None
     days_2: str = None
-    doctor_m3: str = None
     medication_3: str = None
     type_3: str = None
     dosage_3: str = None
     days_3: str = None
-    doctor_p: str = None
+    medication_4: str = None
+    type_4: str = None
+    dosage_4: str = None
+    days_4: str = None
+    medication_5: str = None
+    type_5: str = None
+    dosage_5: str = None
+    days_5: str = None
     previous_treatment: str = None
     complaint_p: str = None
     findings: str = None
