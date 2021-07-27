@@ -8,18 +8,21 @@ feature requests and bugs at either location.
 
 
 Local Backend Setup + GCP configuration
----------------------------------------
+=======================================
 
 **Requirements: Cloud SDK command line tools, postgreSQL, python**
 
 **Create Cluster:**
+-------------------
 Google Cloud Console > Google Kubernetes Engine - new cluster, choose closest region, zonal location type, static version, 3 nodes > create
 **Create DB:**
+--------------
 GCP > SQL > Create Instance “hikma-db”:
 create default user (“postgres”), create UUID password and save it somewhere. 
 Use the same compute zone as the cluster.
 
 **Create bash alias:**
+----------------------
 This activates google account for hikma, also sets local kubernetes to use the hikma cluster
 (in your .bash_profile add this line, with your account, project name, compute zone, and cluster name
 ```
@@ -30,6 +33,7 @@ Close and reopen terminal for that to take effect
 Run activate alias script.
 
 **Create local db user and db:**
+---------------------------------
 
 In terminal,
 
@@ -48,6 +52,7 @@ Set PHOTOS_STORAGE_BUCKET to hikma-api-photos (to be created)
 Set EXPORTS_STORAGE_BUCKET to hikma-api-exports (to be created)
 
 **Create Key Ring/ Service Account, and Key:**
+----------------------------------------------
 GCP left nav> Security > Cryptographic Keys > Create Key Ring and Key
 IAM > Service accounts > Create Service Account > “hikma-app-service-account” (or whatever you want to call it) > Create> Give it the Cloud SQL Admin Role > Continue
 In Service accounts list, on hikma-app-service-account, click actions, create key (JSON)
@@ -83,6 +88,7 @@ Same region as cluster, uniform access,
 Under permissions give the service account you created access to the buckets as a “Storage Object Admin” Role
 
 **Add a demo clinic and initial demo user to your local database**
+-------------------------------------------------------------------
 
 Refer to `./app/scripts/` for scripts to do this.
 
@@ -99,8 +105,10 @@ python scripts/add_new_user.py  local_user user@endlessmedicaladvantage.com pass
 ```
 
 **Setting up deployment**
+=========================
 
-Create an app user and app db for the hikma db instance hikma-db:
+**Create an app user and app db for the hikma db instance hikma-db:**
+----------------------------------------------------------------------
 GCP left nav> SQL > Select hikma-db > Add User > Built in authentication >
 Create an app user with username hikma_prod and password a randomly generated UUID that you store somewhere safe along with the password for the default user.
 
@@ -151,6 +159,7 @@ Add the following variables:
 Commit all your changes to master, which should cause your build trigger to create an image.
 
 **Create deployment, certificate, service and ingress with Kubernetes**
+------------------------------------------------------------------------
 Templates for the yaml files needed for configuration can be found here: https://github.com/hikmahealth/hikma-health-backend-nv/tree/master/k8s
 (You'll need all 6 files prefixed with "nv-")
  
@@ -186,8 +195,8 @@ Lastly, using the correct compute zone, cluster name, deployment name, container
 This will set the image to be deployed. You could do this for the CronJob image as well.
  
 Once everything is created, make sure that it is working by navigating to the resource record. You should see:
-`
+```
 {"message":"Welcome to the Hikma Health backend.","status":"OK"}
-`
+```
 
 
