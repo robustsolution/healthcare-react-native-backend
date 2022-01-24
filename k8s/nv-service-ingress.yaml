@@ -1,0 +1,11 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.global-static-ip-name: nv-app-ip
+    networking.gke.io/managed-certificates: nv-api-certificate
+  name: nv-service-ingress
+spec:
+  backend:
+    serviceName: nv-nodeport-service
+    servicePort: 80

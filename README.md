@@ -160,7 +160,7 @@ Commit all your changes to master, which should cause your build trigger to crea
 
 **Create deployment, certificate, service and ingress with Kubernetes**
 ------------------------------------------------------------------------
-Templates for the yaml files needed for configuration can be found here: https://github.com/hikmahealth/hikma-health-backend-nv/tree/master/k8s
+Templates for the yaml files needed for configuration can be found in ~/k8s/
 (You'll need all 6 files prefixed with "nv-")
  
 Here is some k8s documentation for how to apply these changes

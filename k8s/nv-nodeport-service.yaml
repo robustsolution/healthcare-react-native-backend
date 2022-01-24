@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: nv-nodeport-service
+  annotations:
+    cloud.google.com/backend-config: '{"ports": {"80":"nv-app-backendconfig"}}'
+spec:
+  externalTrafficPolicy: Cluster
+  ports:
+  - nodePort: 30100
+    port: 80
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: hikma-health-backend-nv
+  type: NodePort

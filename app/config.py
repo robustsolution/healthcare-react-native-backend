@@ -10,7 +10,8 @@ if ENV in ('dev_local', 'dev_docker', 'stg'):
         PG_HOST = 'db'
 
     PG_USER = 'hikma_dev'
-    PG_PASSWORD = 'password'
+    # PG_PASSWORD = 'password'
+    PG_PASSWORD = '96DDDDDB6425'
     PG_DB = 'hikma_dev'
     FLASK_DEBUG = True
     PHOTOS_STORAGE_BUCKET = 'dev-api-photos'
