@@ -15,6 +15,7 @@ Local Backend Setup + GCP configuration
 **Create Cluster:**
 -------------------
 Google Cloud Console > Google Kubernetes Engine - new cluster, choose closest region, zonal location type, static version, 3 nodes > create
+
 **Create DB:**
 --------------
 GCP > SQL > Create Instance “hikma-db”:
@@ -48,7 +49,6 @@ Createdb hikma_dev -O hikma_dev
 In ./app/config.py
 Set PG_USER to user you just created
 Set PG_DB to db you just created
-Set PHOTOS_STORAGE_BUCKET to hikma-api-photos (to be created)
 Set EXPORTS_STORAGE_BUCKET to hikma-api-exports (to be created)
 
 **Create Key Ring/ Service Account, and Key:**
@@ -83,7 +83,7 @@ export GOOGLE_APPLICATION_CREDENTIALS=[key_filename].json
 
 At this point, you should be able to `./run.sh` in your venv to run locally
 
-Create PHOTOS_STORAGE_BUCKET as “hikma-api-photos” and EXPORTS_STORAGE_BUCKET as “hikma-api-exports”
+Create EXPORTS_STORAGE_BUCKET as “hikma-api-exports”
 Same region as cluster, uniform access, 
 Under permissions give the service account you created access to the buckets as a “Storage Object Admin” Role
 
@@ -96,7 +96,6 @@ Run `add_demo_clinic.py` first, and then run `add_new_user.py` with the three re
 ```
 cd app/
 export PYTHONPATH=.
-python scripts/add_demo_clinic.py
 python scripts/add_demo_clinic.py
 ```
 (example credentials below)
@@ -154,7 +153,6 @@ In GCP Cloud Build > Triggers, Create a trigger with the forked backend repo fro
 Add the following variables:
 `_DB_PASSWORD`= password for the hikma_prod App User (Not the postgres user)
 `_EXPORTS_STORAGE_BUCKET`= exports storage bucket you created earlier
-`_PHOTOS_STORAGE_BUCKET`= photos storage bucket you created earlier
 
 Commit all your changes to master, which should cause your build trigger to create an image.
 
