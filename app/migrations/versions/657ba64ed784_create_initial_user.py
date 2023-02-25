@@ -12,24 +12,27 @@ import uuid
 
 
 # revision identifiers, used by Alembic.
-revision = '657ba64ed784'
-down_revision = '47dc360e825a'
+revision = "657ba64ed784"
+down_revision = "47dc360e825a"
 branch_labels = None
 depends_on = None
 
 
 def upgrade():
-    user_name_id = str(uuid.uuid4())
-    op.execute(f"INSERT INTO string_ids (id) VALUES ('{user_name_id}')")
-    op.execute(f"""
-    INSERT INTO string_content (id, language, content, edited_at) 
-    VALUES ('{user_name_id}', 'en', 'Sam Brotherton', '{datetime.now().isoformat()}')
-    """)
-    op.execute(f"""
-    INSERT INTO users (id, name, role, email, hashed_password, edited_at) 
-    VALUES ('{str(uuid.uuid4())}', '{user_name_id}', 'super_admin', 'sam@hikmahealth.org', '$2b$12$VaVVnY5MtFLFE5KjNu.aMekKC2OyKet3i1v1pU3fbZOBsaA43hASy', '{datetime.now().isoformat()}')
-    """)
+    op.execute(
+        f"""
+    INSERT INTO users (id, name, role, email, hashed_password, instance_url, created_at, updated_at, is_deleted) 
+    VALUES ('{str(uuid.uuid4())}', 'Hikma Admin', 'super_admin', 'admin@hikmahealth.org', '$2b$12$zGamv7dcT3FLW/IW1cQXeu0672F8gBKL8eyik7lkN6lLW0Wku6tDy', '{None}', '{datetime.now().isoformat()}', '{datetime.now().isoformat()}', '{False}')
+    """
+    )
+
+    # FIXME: CREATE OWN CLINIC
+    op.execute(
+        f"""
+        INSERT INTO clinics (id, name) VALUES ('{str(uuid.uuid4())}', 'Hikma Clinic')
+    """
+    )
 
 
 def downgrade():
-    op.execute("DELETE FROM users WHERE email = 'sam@hikmahealth.org';")
+    op.execute("DELETE FROM users WHERE email = 'admin@hikmahealth.org';")
