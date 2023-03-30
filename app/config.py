@@ -1,6 +1,10 @@
 import os
+from dotenv import load_dotenv
 
+load_dotenv()
 ENV = os.environ.get("APP_ENV", "dev_local")
+
+print("ENV: ", os.getenv("APP_ENV"))
 
 FLASK_DEBUG_PORT = 5000
 

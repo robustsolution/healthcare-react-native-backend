@@ -136,20 +136,37 @@ def upgrade():
 
     op.execute(
         """
-    CREATE TABLE events (
-      id uuid PRIMARY KEY,
-      patient_id uuid REFERENCES patients(id) ON DELETE CASCADE,
-      visit_id uuid REFERENCES visits(id) ON DELETE CASCADE DEFAULT NULL,
-      event_type TEXT,
-      event_metadata JSONB NOT NULL DEFAULT '{}',
-      is_deleted boolean default false,
-      created_at timestamp with time zone default now(),
-      updated_at timestamp with time zone default now(),
-      last_modified timestamp with time zone default now(),
-      server_created_at timestamp with time zone default now(),
-      deleted_at timestamp with time zone default null
-    );
-    """
+        CREATE TABLE events (
+            id uuid PRIMARY KEY,
+            patient_id uuid REFERENCES patients(id) ON DELETE CASCADE,
+            visit_id uuid REFERENCES visits(id) ON DELETE CASCADE DEFAULT NULL,
+            event_type TEXT,
+            event_metadata JSONB NOT NULL DEFAULT '{}',
+            is_deleted boolean default false,
+            created_at timestamp with time zone default now(),
+            updated_at timestamp with time zone default now(),
+            last_modified timestamp with time zone default now(),
+            server_created_at timestamp with time zone default now(),
+            deleted_at timestamp with time zone default null
+        );
+        """
+    )
+
+    op.execute(
+        """
+        CREATE TABLE event_forms (
+            id uuid PRIMARY KEY,
+            name TEXT,
+            description TEXT,
+            metadata JSONB NOT NULL DEFAULT '{}',
+            is_deleted boolean default false,
+            created_at timestamp with time zone default now(),
+            updated_at timestamp with time zone default now(),
+            last_modified timestamp with time zone default now(),
+            server_created_at timestamp with time zone default now(),
+            deleted_at timestamp with time zone default null
+        );
+        """
     )
 
     op.execute(
@@ -173,3 +190,4 @@ def downgrade():
     op.execute("DROP TABLE patients;")
     op.execute("DROP TABLE string_content;")
     op.execute("DROP TABLE string_ids;")
+    op.execute("DROP TABLE event_forms;")

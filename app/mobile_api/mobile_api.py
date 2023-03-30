@@ -93,6 +93,7 @@ def sync_v2():
             visits,
             string_ids,
             string_content,
+            event_forms,
         ) = getNthTimeSyncData(convert_timestamp_to_gmt(lastPulledAt))
 
         print(
@@ -132,6 +133,11 @@ def sync_v2():
                     "string_content": {
                         "created": string_content[0],
                         "updated": string_content[1],
+                        "deleted": events[2],
+                    },
+                    "event_forms": {
+                        "created": event_forms[0],
+                        "updated": event_forms[1],
                         "deleted": events[2],
                     },
                 },
@@ -191,6 +197,10 @@ def getNthTimeSyncData(timestamp):
     string_content_new = []
     string_content_updated = []
     string_content_deleted = []
+
+    event_forms_new = []
+    event_forms_updated = []
+    event_forms_deleted = []
 
     is_not_deleted_str = " AND is_deleted = false"
     is_deleted_str = " AND is_deleted = true"
@@ -379,6 +389,34 @@ def getNthTimeSyncData(timestamp):
                 for row in string_content_new
             ]
 
+        with conn.cursor() as cur:
+            cur.execute(
+                "SELECT * FROM event_forms WHERE last_modified > %s AND last_modified < %s" + is_not_deleted_str,
+                (timestamp, timestamp),
+            )
+            # cur.execute(
+            #     "SELECT * FROM event_forms WHERE last_modified > %s", (timestamp,),
+            # )
+            event_forms_updated = cur.fetchall()
+            event_forms_updated = [
+                dict(zip([column[0] for column in cur.description], row))
+                for row in event_forms_updated
+            ]
+
+        with conn.cursor() as cur:
+            cur.execute(
+                "SELECT * FROM event_forms WHERE server_created_at > %s AND last_modified > %s" + is_not_deleted_str,
+                (timestamp, timestamp),
+            )
+            # cur.execute(
+            #     "SELECT * FROM event_forms WHERE server_created_at > %s", (timestamp,),
+            # )
+            event_forms_new = cur.fetchall()
+            event_forms_new = [
+                dict(zip([column[0] for column in cur.description], row))
+                for row in event_forms_new
+            ]
+
     return (
         (events_new, events_updated, events_deleted),
         (patients_new, patients_updated, patients_deleted),
@@ -386,6 +424,7 @@ def getNthTimeSyncData(timestamp):
         (visits_new, visits_updated, visits_deleted),
         (string_ids_new, string_ids_updated, string_ids_deleted),
         (string_content_new, string_content_updated, string_content_deleted),
+        (event_forms_new, event_forms_updated, event_forms_deleted),
     )
 
 
@@ -455,7 +494,16 @@ def getFirstTimeSyncData():
                 for row in string_content
             ]
 
-    return (events, patients, clinics, visits, string_ids, string_content)
+    with get_connection() as conn:
+        with conn.cursor() as cur:
+            cur.execute("SELECT * FROM event_forms")
+            event_forms = cur.fetchall()
+            event_forms = [
+                dict(zip([column[0] for column in cur.description], row))
+                for row in event_forms
+            ]
+
+    return (events, patients, clinics, visits, string_ids, string_content, event_forms)
 
 
 # data = { "patients": { "created": [], "updated": [], "deleted": [] }, "events": {}, "visits": {}, "users": {}, "clinics": "" }

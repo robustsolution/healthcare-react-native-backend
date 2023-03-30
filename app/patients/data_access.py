@@ -63,8 +63,11 @@ def patient_from_key_data(given_name: str, surname: str, country: str, sex: str)
             return row[0]
 
 def all_patient_data():
+    # query = """
+    # SELECT id, given_name, surname, date_of_birth, sex, country, hometown, phone, edited_at FROM patients ORDER BY edited_at DESC LIMIT 25
+    # """
     query = """
-    SELECT id, given_name, surname, date_of_birth, sex, country, hometown, phone, edited_at FROM patients ORDER BY edited_at DESC LIMIT 25
+    SELECT id, given_name, surname, date_of_birth, sex, country, hometown, phone, created_at, updated_at FROM patients ORDER BY updated_at DESC
     """
     with get_connection() as conn:
         with conn.cursor() as cur:
