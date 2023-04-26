@@ -159,6 +159,7 @@ def upgrade():
             name TEXT,
             description TEXT,
             metadata JSONB NOT NULL DEFAULT '{}',
+            language TEXT NOT NULL DEFAULT 'en',
             is_deleted boolean default false,
             created_at timestamp with time zone default now(),
             updated_at timestamp with time zone default now(),
