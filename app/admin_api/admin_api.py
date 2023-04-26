@@ -160,8 +160,8 @@ def save_event_form(_admin_user):
         with conn.cursor() as cur:
             try:
                 cur.execute(
-                    "INSERT INTO event_forms (id, name, description, metadata, created_at, updated_at) VALUES (%s, %s, %s, %s, %s, %s)",
-                    (event_form['id'], event_form['name'], event_form['description'], event_form['metadata'], event_form['createdAt'], event_form['updatedAt'])
+                    "INSERT INTO event_forms (id, name, description, metadata, language, created_at, updated_at) VALUES (%s, %s, %s, %s, %s, %s)",
+                    (event_form['id'], event_form['name'], event_form['description'], event_form['metadata'], event_form["language"], event_form['createdAt'], event_form['updatedAt'])
                 )
             except Exception as e:
                 conn.rollback()
@@ -178,15 +178,16 @@ def get_event_forms(_admin_user):
     with get_connection() as conn:
         with conn.cursor() as cur:
             try:
-                cur.execute("SELECT id, name, description, metadata, created_at, updated_at FROM event_forms")
+                cur.execute("SELECT id, name, description, metadata, language, created_at, updated_at FROM event_forms")
                 for frm in cur.fetchall():
                     event_forms.append({
                         "id": frm[0],
                         "name": frm[1],
                         "description": frm[2],
                         "metadata": frm[3],
-                        "createdAt": frm[4],
-                        "updatedAt": frm[5]
+                        "language": frm[4],
+                        "createdAt": frm[5],
+                        "updatedAt": frm[66]
                     })
             except Exception as e:
                 conn.rollback()
