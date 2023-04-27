@@ -160,7 +160,7 @@ def save_event_form(_admin_user):
         with conn.cursor() as cur:
             try:
                 cur.execute(
-                    "INSERT INTO event_forms (id, name, description, metadata, language, created_at, updated_at) VALUES (%s, %s, %s, %s, %s, %s)",
+                    "INSERT INTO event_forms (id, name, description, metadata, language, created_at, updated_at) VALUES (%s, %s, %s, %s, %s, %s, %s)",
                     (event_form['id'], event_form['name'], event_form['description'], event_form['metadata'], event_form["language"], event_form['createdAt'], event_form['updatedAt'])
                 )
             except Exception as e:
