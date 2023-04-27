@@ -187,7 +187,7 @@ def get_event_forms(_admin_user):
                         "metadata": frm[3],
                         "language": frm[4],
                         "createdAt": frm[5],
-                        "updatedAt": frm[66]
+                        "updatedAt": frm[6]
                     })
             except Exception as e:
                 conn.rollback()
