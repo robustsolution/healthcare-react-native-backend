@@ -452,15 +452,17 @@ def apply_edge_event_changes(events, cur, lastPulledAt):
 def apply_edge_visits_changes(visits, cur, lastPulledAt):
     # CREATED VISITS
     if len(visits["created"]) > 0:
-        visit_insert = "INSERT INTO visits (id, patient_id, clinic_id, provider_id, check_in_timestamp, is_deleted, created_at, updated_at, server_created_at, last_modified) VALUES "
+        visit_insert = "INSERT INTO visits (id, patient_id, clinic_id, provider_id, provider_name, check_in_timestamp, is_deleted, metadata, created_at, updated_at, server_created_at, last_modified) VALUES "
         visits_sql = [
             (
                 visit["id"],
                 visit["patient_id"],
                 visit["clinic_id"],
                 visit["provider_id"],
+                visit["provider_name"],
                 date_from_timestamp(visit["check_in_timestamp"]),
                 visit["is_deleted"],
+                visit["metadata"],
                 date_from_timestamp(visit["created_at"]),
                 date_from_timestamp(visit["updated_at"]),
                 # server timestamps set to be those of the client during creation
@@ -480,7 +482,7 @@ def apply_edge_visits_changes(visits, cur, lastPulledAt):
     # UPDATE visits SET name = 'new name' WHERE id = 'id'
     for visit in visits["updated"]:
         cur.execute(
-            f"""UPDATE visits SET patient_id='{visit["patient_id"]}', clinic_id='{visit["clinic_id"]}', provider_id='{visit["provider_id"]}', check_in_timestamp='{visit["check_in_timestamp"]}', is_deleted='{visit["is_deleted"]}', created_at='{date_from_timestamp(visit["created_at"])}', updated_at='{date_from_timestamp(visit["updated_at"])}' WHERE id='{visit["id"]}';"""
+            f"""UPDATE visits SET patient_id='{visit["patient_id"]}', clinic_id='{visit["clinic_id"]}', provider_id='{visit["provider_id"]}', provider_name='{visit["provider_name"]}', check_in_timestamp='{visit["check_in_timestamp"]}', is_deleted='{visit["is_deleted"]}', metadata='{visit["metadata"]}', created_at='{date_from_timestamp(visit["created_at"])}', updated_at='{date_from_timestamp(visit["updated_at"])}' WHERE id='{visit["id"]}';"""
         )
 
     # DELETED VISITS

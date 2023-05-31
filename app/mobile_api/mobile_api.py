@@ -1,5 +1,6 @@
 from flask import Blueprint, request, jsonify
 import time
+from base64 import b64decode
 
 from datetime import timezone, datetime
 from web_util import assert_data_has_keys
@@ -53,9 +54,14 @@ def sync():
     return jsonify({"to_execute": synchronizer.get_client_sql()})
 
 
-# Asking for changes from server
+# Send and Ask for changes from server
 @mobile_api.route("/v2/sync", methods=["GET", "POST"])
 def sync_v2():
+    authorization_header = request.headers['Authorization']
+    email, password = b64decode(authorization_header).decode('utf-8').split(':')
+
+    User.authenticate(email, password)
+
     lastPulledAtReq = request.args.get("last_pulled_at", 0)
     lastPulledAt = (
         int(lastPulledAtReq)
