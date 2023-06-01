@@ -213,13 +213,13 @@ def get_event_forms(_admin_user):
 @admin_api.route("/update_event_form", methods=["POST"])
 @admin_authenticated
 def update_event_form(admin_user):
-    params = assert_data_has_keys(request, {'id', 'udpates'})
+    params = assert_data_has_keys(request, {'id', 'updates'})
     event_form_id = params['id']
-    event_form_update = params['update']
+    event_form_update = params['updates']
     with get_connection() as conn:
         with conn.cursor() as cur:
             try:
-                updates_str = ", ".join([f"{k}='{a[k]}'" for k in event_form_update.keys()])
+                updates_str = ", ".join([f"{k}='{event_form_update[k]}'" for k in event_form_update.keys()])
                 sqlQuery = "UPDATE event_forms SET " + updates_str + " WHERE id=" + event_form_id
                 print(updates_str)
                 print(sqlQuery)
