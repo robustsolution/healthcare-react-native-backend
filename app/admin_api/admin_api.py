@@ -161,7 +161,7 @@ def save_event_form(_admin_user):
         with conn.cursor() as cur:
             try:
                 cur.execute(
-                    "INSERT INTO event_forms (id, name, description, metadata, language, is_editable, is_snapshot_form, created_at, updated_at) VALUES (%s, %s, %s, %s, %s, %s, %s)",
+                    "INSERT INTO event_forms (id, name, description, metadata, language, is_editable, is_snapshot_form, created_at, updated_at) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)",
                     (
                         event_form['id'], 
                         event_form['name'], 
