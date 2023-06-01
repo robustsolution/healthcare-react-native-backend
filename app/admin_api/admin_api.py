@@ -198,7 +198,7 @@ def get_event_forms(_admin_user):
                         "metadata": frm[3],
                         "language": frm[4],
                         "is_editable": frm[5],
-                        "is_snapshot_form": fmr[6],
+                        "is_snapshot_form": frm[6],
                         "createdAt": frm[7],
                         "updatedAt": frm[8]
                     })
