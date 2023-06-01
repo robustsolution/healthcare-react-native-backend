@@ -228,6 +228,7 @@ def update_event_form(admin_user):
                 conn.rollback()
                 print("Error updating event form: ", e)
                 raise e
+    return jsonify({ 'message': 'OK' })
 
 
 @admin_api.route('/delete_event_form', methods=['DELETE'])
