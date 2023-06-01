@@ -57,8 +57,16 @@ def sync():
 # Send and Ask for changes from server
 @mobile_api.route("/v2/sync", methods=["GET", "POST"])
 def sync_v2():
-    authorization_header = request.headers['Authorization']
-    email, password = b64decode(authorization_header).decode('utf-8').split(':')
+    # authorization_header = request.headers['Authorization']
+    auth_header = request.headers.get('Authorization')
+    encoded_username_password = auth_header.split(' ')[1]
+
+    # Decode the username and password
+    decoded_username_password = base64.b64decode(encoded_username_password).decode()
+
+    # Split the decoded string into email and password
+    email, password = decoded_username_password.split(':')
+    # email, password = b64decode(authorization_header).decode('utf-8').split(':')
 
     User.authenticate(email, password)
 
