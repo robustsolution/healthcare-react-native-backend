@@ -3,6 +3,7 @@ from web_util import assert_data_has_keys, admin_authenticated
 from db_util import get_connection
 from web_errors import WebError
 from users.user import User
+from datetime import datetime
 from patients.patient import Patient
 from patients.data_access import all_patient_data, search_patients
 from users.data_access import all_user_data, add_user, delete_user_by_id, user_data_by_email
@@ -160,8 +161,18 @@ def save_event_form(_admin_user):
         with conn.cursor() as cur:
             try:
                 cur.execute(
-                    "INSERT INTO event_forms (id, name, description, metadata, language, created_at, updated_at) VALUES (%s, %s, %s, %s, %s, %s, %s)",
-                    (event_form['id'], event_form['name'], event_form['description'], event_form['metadata'], event_form["language"], event_form['createdAt'], event_form['updatedAt'])
+                    "INSERT INTO event_forms (id, name, description, metadata, language, is_editable, is_snapshot_form, created_at, updated_at) VALUES (%s, %s, %s, %s, %s, %s, %s)",
+                    (
+                        event_form['id'], 
+                        event_form['name'], 
+                        event_form['description'], 
+                        event_form['metadata'], 
+                        event_form["language"], 
+                        event_form["is_editable"], 
+                        event_form["is_snapshot_form"], 
+                        event_form['createdAt'], 
+                        event_form['updatedAt']
+                    )
                 )
             except Exception as e:
                 conn.rollback()
@@ -178,7 +189,7 @@ def get_event_forms(_admin_user):
     with get_connection() as conn:
         with conn.cursor() as cur:
             try:
-                cur.execute("SELECT id, name, description, metadata, language, created_at, updated_at FROM event_forms")
+                cur.execute("SELECT id, name, description, metadata, language, is_editable, is_snapshot_form, created_at, updated_at FROM event_forms")
                 for frm in cur.fetchall():
                     event_forms.append({
                         "id": frm[0],
@@ -186,8 +197,10 @@ def get_event_forms(_admin_user):
                         "description": frm[2],
                         "metadata": frm[3],
                         "language": frm[4],
-                        "createdAt": frm[5],
-                        "updatedAt": frm[6]
+                        "is_editable": frm[5],
+                        "is_snapshot_form": fmr[6],
+                        "createdAt": frm[7],
+                        "updatedAt": frm[8]
                     })
             except Exception as e:
                 conn.rollback()
@@ -196,6 +209,25 @@ def get_event_forms(_admin_user):
 
     return jsonify({'event_forms': event_forms})
 
+
+@admin_api.route("/update_event_form", methods=["POST"])
+@admin_authenticated
+def update_event_form(admin_user):
+    params = assert_data_has_keys(request, {'id', 'udpates'})
+    event_form_id = params['id']
+    event_form_update = params['update']
+    with get_connection() as conn:
+        with conn.cursor() as cur:
+            try:
+                updates_str = " ".join([f"{k}='{a[k]}'" for k in event_form_update.keys()])
+                sqlQuery = "UPDATE event_forms SET " + updates_str + " WHERE id=" + event_form_id
+                print(updates_str)
+                print(sqlQuery)
+                cur.execute(sqlQuery)
+            except Exception as e:
+                conn.rollback()
+                print("Error updating event form: ", e)
+                raise e
 
 
 @admin_api.route('/delete_event_form', methods=['DELETE'])
@@ -206,7 +238,10 @@ def delete_event_form(_admin_user):
     with get_connection() as conn:
         with conn.cursor() as cur:
             try:
-                cur.execute("DELETE FROM event_forms WHERE id = %s", (event_form_id,))
+                dt = datetime.now()
+                # cur.execute("DELETE FROM event_forms WHERE id = %s", (event_form_id,))
+                # Flag form as deleted
+                cur.execute(f"UPDATE event_forms SET is_deleted=TRUE deleted_at='{dt}' WHERE id='{event_form_id}'")
             except Exception as e:
                 conn.rollback()
                 print("Error while deleting event form: ", e)
