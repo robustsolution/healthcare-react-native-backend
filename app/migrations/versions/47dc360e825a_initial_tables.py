@@ -162,6 +162,8 @@ def upgrade():
             description TEXT,
             metadata JSONB NOT NULL DEFAULT '{}',
             language TEXT NOT NULL DEFAULT 'en',
+            is_editable boolean default true,
+            is_snapshot_form boolean default false,
             is_deleted boolean default false,
             created_at timestamp with time zone default now(),
             updated_at timestamp with time zone default now(),
