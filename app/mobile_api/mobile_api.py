@@ -62,7 +62,7 @@ def sync_v2():
     encoded_username_password = auth_header.split(' ')[1]
 
     # Decode the username and password
-    decoded_username_password = base64.b64decode(encoded_username_password).decode()
+    decoded_username_password = b64decode(encoded_username_password).decode()
 
     # Split the decoded string into email and password
     email, password = decoded_username_password.split(':')
