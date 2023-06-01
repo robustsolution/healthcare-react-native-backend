@@ -219,7 +219,7 @@ def update_event_form(admin_user):
     with get_connection() as conn:
         with conn.cursor() as cur:
             try:
-                updates_str = " ".join([f"{k}='{a[k]}'" for k in event_form_update.keys()])
+                updates_str = ", ".join([f"{k}='{a[k]}'" for k in event_form_update.keys()])
                 sqlQuery = "UPDATE event_forms SET " + updates_str + " WHERE id=" + event_form_id
                 print(updates_str)
                 print(sqlQuery)
@@ -241,7 +241,7 @@ def delete_event_form(_admin_user):
                 dt = datetime.now()
                 # cur.execute("DELETE FROM event_forms WHERE id = %s", (event_form_id,))
                 # Flag form as deleted
-                cur.execute(f"UPDATE event_forms SET is_deleted=TRUE deleted_at='{dt}' WHERE id='{event_form_id}'")
+                cur.execute(f"UPDATE event_forms SET is_deleted=TRUE, deleted_at='{dt}' WHERE id='{event_form_id}'")
             except Exception as e:
                 conn.rollback()
                 print("Error while deleting event form: ", e)
