@@ -223,6 +223,10 @@ def getNthTimeSyncData(timestamp):
                 for row in string_content_new
             ]
 
+        #################################
+        ######### EVENT FORMS ###########
+        #################################
+        # Updated event forms
         with conn.cursor() as cur:
             cur.execute(
                 "SELECT * FROM event_forms WHERE last_modified > %s AND last_modified < %s"
@@ -230,7 +234,7 @@ def getNthTimeSyncData(timestamp):
                 (timestamp, timestamp),
             )
             # cur.execute(
-            #     "SELECT * FROM event_forms WHERE last_modified > %s", (timestamp,),
+            #     "SELECT * fromOM event_forms WHERE last_modified > %s", (timestamp,),
             # )
             event_forms_updated = cur.fetchall()
             event_forms_updated = [
@@ -238,6 +242,7 @@ def getNthTimeSyncData(timestamp):
                 for row in event_forms_updated
             ]
 
+        # New event forms
         with conn.cursor() as cur:
             cur.execute(
                 "SELECT * FROM event_forms WHERE server_created_at > %s AND last_modified > %s"
@@ -251,6 +256,18 @@ def getNthTimeSyncData(timestamp):
             event_forms_new = [
                 dict(zip([column[0] for column in cur.description], row))
                 for row in event_forms_new
+            ]
+
+        # Deleted event forms
+        with conn.cursor() as cur:
+            cur.execute(
+                "SELECT * FROM event_forms WHERE deleted_at > %s" + is_deleted_str,
+                (timestamp,),
+            )
+            event_forms_deleted = cur.fetchall()
+            event_forms_deleted = [
+                dict(zip([column[0] for column in cur.description], row))
+                for row in event_forms_deleted
             ]
 
     return (
