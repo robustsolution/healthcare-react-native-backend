@@ -70,13 +70,12 @@ def getNthTimeSyncData(timestamp):
         # deleted events
         with conn.cursor() as cur:
             cur.execute(
-                "SELECT * FROM events WHERE deleted_at > %s" + is_deleted_str,
+                "SELECT id FROM events WHERE deleted_at > %s" + is_deleted_str,
                 (timestamp,),
             )
             events_deleted = cur.fetchall()
             events_deleted = [
-                dict(zip([column[0] for column in cur.description], row))
-                for row in events_deleted
+                row[0] for row in events_deleted
             ]
 
         with conn.cursor() as cur:
@@ -106,13 +105,12 @@ def getNthTimeSyncData(timestamp):
         # deleted patients
         with conn.cursor() as cur:
             cur.execute(
-                "SELECT * FROM patients WHERE deleted_at > %s" + is_deleted_str,
+                "SELECT id FROM patients WHERE deleted_at > %s" + is_deleted_str,
                 (timestamp,),
             )
             patients_deleted = cur.fetchall()
             patients_deleted = [
-                dict(zip([column[0] for column in cur.description], row))
-                for row in patients_deleted
+                row[0] for row in patients_deleted
             ]
 
         # new cursor and select by last modiied and server_created_at, like above for visits, string_ids and string_content
@@ -170,13 +168,12 @@ def getNthTimeSyncData(timestamp):
         # deleted visits
         with conn.cursor() as cur:
             cur.execute(
-                "SELECT * FROM visits WHERE deleted_at > %s" + is_deleted_str,
+                "SELECT id FROM visits WHERE deleted_at > %s" + is_deleted_str,
                 (timestamp,),
             )
             visits_deleted = cur.fetchall()
             visits_deleted = [
-                dict(zip([column[0] for column in cur.description], row))
-                for row in visits_deleted
+                row[0] for row in visits_deleted
             ]
 
         with conn.cursor() as cur:
@@ -261,13 +258,12 @@ def getNthTimeSyncData(timestamp):
         # Deleted event forms
         with conn.cursor() as cur:
             cur.execute(
-                "SELECT * FROM event_forms WHERE deleted_at > %s" + is_deleted_str,
+                "SELECT id FROM event_forms WHERE deleted_at > %s" + is_deleted_str,
                 (timestamp,),
             )
             event_forms_deleted = cur.fetchall()
             event_forms_deleted = [
-                dict(zip([column[0] for column in cur.description], row))
-                for row in event_forms_deleted
+                row[0] for row in events_deleted
             ]
 
     return (
