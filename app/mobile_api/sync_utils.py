@@ -263,7 +263,7 @@ def getNthTimeSyncData(timestamp):
             )
             event_forms_deleted = cur.fetchall()
             event_forms_deleted = [
-                row[0] for row in events_deleted
+                row[0] for row in event_forms_deleted
             ]
 
     return (
