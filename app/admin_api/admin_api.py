@@ -220,7 +220,7 @@ def update_event_form(admin_user):
         with conn.cursor() as cur:
             try:
                 updates_str = ", ".join([f"{k}='{event_form_update[k]}'" for k in event_form_update.keys()])
-                sqlQuery = "UPDATE event_forms SET " + updates_str + " WHERE id=" + f"'{event_form_id}'"
+                sqlQuery = "UPDATE event_forms SET " + updates_str + ", updated_at=CURRENT_TIMESTAMP, last_modified = CURRENT_TIMESTAMP WHERE id=" + f"'{event_form_id}'"
                 print(updates_str)
                 print(sqlQuery)
                 cur.execute(sqlQuery)
