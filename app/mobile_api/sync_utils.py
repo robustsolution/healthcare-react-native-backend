@@ -143,7 +143,7 @@ def getNthTimeSyncData(timestamp):
         ##############
         with conn.cursor() as cur:
             cur.execute(
-                "SELECT * FROM visits WHERE last_modified > %s AND last_modified < %s"
+                "SELECT * FROM visits WHERE last_modified > %s AND server_created_at < %s"
                 + is_not_deleted_str,
                 (timestamp, timestamp),
             )
@@ -226,7 +226,7 @@ def getNthTimeSyncData(timestamp):
         # Updated event forms
         with conn.cursor() as cur:
             cur.execute(
-                "SELECT * FROM event_forms WHERE last_modified > %s AND last_modified < %s"
+                "SELECT * FROM event_forms WHERE last_modified > %s AND server_created_at < %s"
                 + is_not_deleted_str,
                 (timestamp, timestamp),
             )
