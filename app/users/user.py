@@ -28,7 +28,8 @@ class User:
     @classmethod
     def from_db_row(cls, db_row):
         id, name, role, email, hashed_password = db_row
-        return cls(id, LanguageString.from_id(name), role, email, hashed_password.encode())
+        # return cls(id, LanguageString.from_id(name), role, email, hashed_password.encode())
+        return cls(id, name, role, email, hashed_password.encode())
 
     def reset_password(self, new_password):
         db.update_password(self.id, new_password)
@@ -38,10 +39,11 @@ class User:
 
     def to_dict(self):
         return {
-            'id': self.id,
-            'name': self.name.to_dict(),
-            'role': self.role,
-            'email': self.email,
+            "id": self.id,
+            # "name": self.name.to_dict(),
+            "name": self.name,
+            "role": self.role,
+            "email": self.email,
         }
 
     def create_token(self):

@@ -48,13 +48,14 @@ def update_password(user_id, new_password):
 
 
 def add_user(user):
-    update_language_string(user.name)
+    #update_language_string(user.name)
     with get_connection() as conn:
         with conn.cursor() as cur:
             query = '''
-            INSERT INTO users (id, name, role, email, hashed_password, edited_at) VALUES (%s, %s, %s, %s, %s, %s);
+            INSERT INTO users (id, name, role, email, hashed_password) VALUES (%s, %s, %s, %s, %s);
             '''
-            cur.execute(query, [user.id, user.name.id, user.role, user.email, user.hashed_password, datetime.now()])
+            # cur.execute(query, [user.id, user.name.id, user.role, user.email, user.hashed_password, datetime.now()])
+            cur.execute(query, [user.id, user.name, user.role, user.email, user.hashed_password])
 
 
 def create_token(user_id):

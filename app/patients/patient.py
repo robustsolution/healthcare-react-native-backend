@@ -15,7 +15,9 @@ class Patient(ClientObject):
     country: LanguageString
     hometown: LanguageString
     phone: str
-    edited_at: datetime
+    # edited_at: datetime
+    created_at: datetime
+    updated_at: datetime
 
     def client_insert_values(self):
         return [self.id,
@@ -109,18 +111,34 @@ class Patient(ClientObject):
 
     @classmethod
     def from_db_row(cls, db_row):
-        id, given_name, surname, date_of_birth, sex, country, hometown, phone, edited_at = db_row
-        return cls(id, LanguageString.from_id(given_name), LanguageString.from_id(surname), date_of_birth, sex, LanguageString.from_id(country), LanguageString.from_id(hometown), phone, edited_at)    
+        # id, given_name, surname, date_of_birth, sex, country, hometown, phone, edited_at = db_row
+        # return cls(id, LanguageString.from_id(given_name), LanguageString.from_id(surname), date_of_birth, sex, LanguageString.from_id(country), LanguageString.from_id(hometown), phone, edited_at)
+        id, given_name, surname, date_of_birth, sex, country, hometown, phone, created_at, updated_at = db_row
+        return cls(id, given_name, surname, date_of_birth, sex, country, hometown, phone, created_at, updated_at)
+
+    # def to_dict(self):
+    #     return {
+    #         'id': self.id,
+    #         'given_name': self.given_name.to_dict() if self.given_name is not None else None,
+    #         'surname': self.surname.to_dict() if self.surname is not None else None,
+    #         'date_of_birth': self.date_of_birth,
+    #         'sex': self.sex,
+    #         'country': self.country.to_dict() if self.country is not None else None,
+    #         'hometown': self.hometown.to_dict() if self.hometown is not None else None,
+    #         'phone': self.phone,
+    #         'edited_at': self.edited_at
+    #     }
 
     def to_dict(self):
         return {
             'id': self.id,
-            'given_name': self.given_name.to_dict() if self.given_name is not None else None,
-            'surname': self.surname.to_dict() if self.surname is not None else None,
+            'given_name': self.given_name,
+            'surname': self.surname,
             'date_of_birth': self.date_of_birth,
             'sex': self.sex,
-            'country': self.country.to_dict() if self.country is not None else None,
-            'hometown': self.hometown.to_dict() if self.hometown is not None else None,
+            'country': self.country,
+            'hometown': self.hometown,
             'phone': self.phone,
-            'edited_at': self.edited_at
+            'created_at': self.created_at,
+            'updated_at': self.updated_at
         }
