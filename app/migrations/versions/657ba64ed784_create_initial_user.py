@@ -22,7 +22,7 @@ def upgrade():
     op.execute(
         f"""
     INSERT INTO users (id, name, role, email, hashed_password, instance_url, created_at, updated_at, is_deleted) 
-    VALUES ('{str(uuid.uuid4())}', 'Hikma Admin', 'super_admin', 'admin@hikmahealth.org', '$2b$12$zGamv7dcT3FLW/IW1cQXeu0672F8gBKL8eyik7lkN6lLW0Wku6tDy', '{None}', '{datetime.now().isoformat()}', '{datetime.now().isoformat()}', '{False}')
+    VALUES ('{str(uuid.uuid4())}', 'Hikma Admin', 'super_admin', 'admin@hikmahealth.org', '$2b$14$PPY9X2ZxFG93IU9CK4FUtOJW0d11zjHuODO6oJM5UNn59aXjp5h..', '{None}', '{datetime.now().isoformat()}', '{datetime.now().isoformat()}', '{False}')
     """
     )
 
