@@ -140,7 +140,7 @@ def get_summary_stats(_admin_user):
                 event_count = cur.fetchone()[0]
                 cur.execute("SELECT COUNT(*) FROM users")
                 user_count = cur.fetchone()[0]
-                cur.execute("SELECT COUNT(*) FROM event_forms")
+                cur.execute("SELECT COUNT(*) FROM event_forms WHERE is_deleted=FALSE")
                 form_count = cur.fetchone()[0]
                 cur.execute("SELECT COUNT(*) FROM visits")
                 visit_count = cur.fetchone()[0]
