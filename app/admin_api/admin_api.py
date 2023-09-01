@@ -189,7 +189,7 @@ def get_event_forms(_admin_user):
     with get_connection() as conn:
         with conn.cursor() as cur:
             try:
-                cur.execute("SELECT id, name, description, metadata, language, is_editable, is_snapshot_form, created_at, updated_at FROM event_forms")
+                cur.execute("SELECT id, name, description, metadata, language, is_editable, is_snapshot_form, created_at, updated_at FROM event_forms WHERE is_deleted=FALSE")
                 for frm in cur.fetchall():
                     event_forms.append({
                         "id": frm[0],
