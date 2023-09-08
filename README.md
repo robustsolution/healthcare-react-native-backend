@@ -72,7 +72,9 @@ Option 2: Interesting (and possibly treacherous) Method
 - Set up users with appropriate permissions
 - Add your database credentials and connection strings to the `config.py` folder. Use the development block for testing data and the production block for production access.
 
-*Option 2 is interesting and potentially challenging because a few things can go wron during the installation of PostgreSQL due to your local computer set up, and connecting from a physical device to your server can have its own additional steps.*
+This option is better if you wish to do most of your deployment offline, or are running earlier version of this project. For everyone else, Option 1 is highly recommended.
+
+*Option 2 is interesting and potentially challenging because a few things can go wrong during the installation of PostgreSQL due to your local computer set up, and connecting from a physical device to your server can have its own additional steps.*
 
 *For anyone in a hurry to get things to work so that they can focus on customizations needed for the deployment, use Option 1. As a bonus, it gets you more comfortable with the service that will host your main deployments*
 
