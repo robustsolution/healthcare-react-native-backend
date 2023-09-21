@@ -1,14 +1,6 @@
-<p align="centr">
-<img src="https://images.squarespace-cdn.com/content/5cc0e57236f8e70001651ea6/1599789508819-NGZXYWJDQRCULLU94QEJ/hikma-hb.png?format=300w&content-type=image/png" alt="Hikma Health" />
-</p>
 
-# Hikma Health Admin Application
-The Hikma Health platform is a mobile electronic health record system designed for organizations working in low-resource settings to collect and access patient health information. The repository contains the backend code that communicates with the Databae and ensures only authenticated users have access. Additional functionality can be added, along with updating the correct migration files.
-
-The platform is designed to be intuitive and allow for efficient patient workflows for patient registration, data entry, and data download. You can see a user demo here: https://drive.google.com/file/d/1ssBdEPShWCu3ZXNCXnoodbwWgqlTncJb/view?usp=drive_link
-
-
-For more comprehensive documentation visit: https://docs.hikmahealth.org/
+# Health Care Admin Application
+The Health Care platform is a mobile electronic health record system designed for organizations working in low-resource settings to collect and access patient health information. The repository contains the backend code that communicates with the Databae and ensures only authenticated users have access. Additional functionality can be added, along with updating the correct migration files.
 
 *NOTE: This repository contains transition code for users coming from previous versions. If there are functions that you do not need, check twice and feel free to remove the dead code.*
 
@@ -22,13 +14,13 @@ For more comprehensive documentation visit: https://docs.hikmahealth.org/
 Clone the project
 
 ```bash
-  git clone git@github.com:hikmahealth/hikma-health-backend.git
+  git clone git@github.com:crazynavi/healthcare-react-native-backend.git
 ```
 
 Go to the project directory
 
 ```bash
-  cd hikma-health-backend/app
+  cd healthcare-react-native-backend/app
 ```
 
 Create a new virtual environment to avoid conflicts and global polution of your system
@@ -84,7 +76,7 @@ This option is better if you wish to do most of your deployment offline, or are 
 
 To run this project, you will need to add the following environment variable to your .env file
 
-`NEXT_PUBLIC_HIKMA_API`
+`NEXT_PUBLIC_Navi_API`
 
 This variable holds a link to the backend (server) which connects to the database.This file is by default already ignored in the `.gitignore` file, make sure it remains there.
 
